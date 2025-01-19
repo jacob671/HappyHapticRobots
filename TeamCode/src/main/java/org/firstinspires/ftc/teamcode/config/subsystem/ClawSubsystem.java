@@ -29,8 +29,8 @@ public class ClawSubsystem {
     // Servo positions
     private static final double TURN_GRAB_POSITION = 0.9;
     private static final double TURN_RELEASE_POSITION = 0.33;
-    private static final double SPIN_GRAB_POSITION = 0.1;
-    private static final double SPIN_RELEASE_POSITION = 0.8;
+    private static final double SPIN_GRAB_POSITION = 0.63;
+    private static final double SPIN_RELEASE_POSITION = 1;
 
     private static final double BUCKET_DUMP_POSITION = 0.1;
     private static final double BUCKET_NEUTRAL_POSITION = 0.5;
@@ -113,6 +113,14 @@ public class ClawSubsystem {
             liftControlActive = true;
             moveElevatorToPosition(STARTING_POSITION_TICKS, 0); // Set height to 0 when back to start
         }
+    }
+    public void extend() {
+        extendServo.setPosition(0.8);
+
+    }
+    public void retract() {
+        extendServo.setPosition(0.5);
+
     }
 
 
@@ -215,7 +223,7 @@ public class ClawSubsystem {
     }
 
     public void grabReady() {
-        spinServo.setPosition(0.8);
+        spinServo.setPosition(SPIN_RELEASE_POSITION);
         turnServo.setPosition(0.8);
     }
 
@@ -228,7 +236,9 @@ public class ClawSubsystem {
 
     public void reset() {
         turnServo.setPosition(0.9);
-        spinServo.setPosition(0.7);
+
+        spinServo.setPosition(SPIN_RELEASE_POSITION);
+
     }
 
     public void release() {

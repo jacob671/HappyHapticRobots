@@ -21,7 +21,7 @@ public class AutoTest3BackUpWorking01102025 extends OpMode {
     private int pathState = 0;
     private int loopNumber = 0;
 
-    private double positionTol = 1;
+    private double positionTol = 1.2;
     // position tolerance for the robot
 
 
@@ -148,7 +148,6 @@ public class AutoTest3BackUpWorking01102025 extends OpMode {
         switch (pathState) {
             case 0:
                 follower.followPath(scorePreload, true);
-
                 if(clawSubsystem.height != 2) {
                     clawSubsystem.moveUp();
                 }
@@ -187,7 +186,7 @@ public class AutoTest3BackUpWorking01102025 extends OpMode {
                 break;
             case 3:
                 // picking up the first sample
-                if (isNearPose(follower.getPose(), pickup1Pose, 1)){
+                if (isNearPose(follower.getPose(), pickup1Pose, 1.3)){
                     if (clawSubsystem.height != 0) {
                         clawSubsystem.moveDown();
                         clawSubsystem.grabVertical();
@@ -196,7 +195,7 @@ public class AutoTest3BackUpWorking01102025 extends OpMode {
                         if (!sampleInBasket) {
                             if (!sampleInGraber) {
                                 clawSubsystem.grab();
-                                if (opmodeTimer.getElapsedTimeSeconds() > 3.5) {
+                                if (opmodeTimer.getElapsedTimeSeconds() > 4) {
                                     clawSubsystem.release();
                                     sampleInBasket=true;
                                     setPathState(4);

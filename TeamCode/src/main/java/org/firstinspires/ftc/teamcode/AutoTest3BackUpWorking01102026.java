@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
-@Autonomous(name = "AutoLeftBackupFastUnstable", group = "Examples")
+@Autonomous(name = "AutoLeftBackupFast", group = "Examples")
 public class AutoTest3BackUpWorking01102026 extends OpMode {
 
     private Follower follower;
@@ -147,23 +147,19 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
     private void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-//                follower.followPath(scorePreload, true);
-
+                follower.followPath(scorePreload, true);
                 if(clawSubsystem.height != 2) {
                     clawSubsystem.moveUp();
                 }
-                if (clawSubsystem.getElevatorPosition() <-1000) {
-                    follower.followPath(scorePreload, true);
-
+                else if (clawSubsystem.height == 2) {
                     opmodeTimer.resetTimer();
                     setPathState(1);
                     //telemetry.addData("PathState", "1");
                 }
                 break;
             case 1:
-                // Dump bucket object and move to next position
-                if (isNearPose(follower.getPose(), scorePose, 1.5 )){
-
+                // Dump bucket for 1st object initially on the bucket and move to next position
+                if (isNearPose(follower.getPose(), scorePose, 0.5 )){
                     if (sampleInBasket) {
                         if (clawSubsystem.height != 2) {
                             clawSubsystem.moveUp();
@@ -176,10 +172,7 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                             setPathState(2);
                         }
                     }
-
-
                 }
-
                 break;
             case 2:
 // Lower elevator, follow path, and release claw object
@@ -193,7 +186,7 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                 break;
             case 3:
                 // picking up the first sample
-                if (isNearPose(follower.getPose(), pickup1Pose, 1)){
+                if (isNearPose(follower.getPose(), pickup1Pose, 1.3)){
                     if (clawSubsystem.height != 0) {
                         clawSubsystem.moveDown();
                         clawSubsystem.grabVertical();
@@ -202,9 +195,10 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                         if (!sampleInBasket) {
                             if (!sampleInGraber) {
                                 clawSubsystem.grab();
-                                if (opmodeTimer.getElapsedTimeSeconds() > 3.5) {
+                                if (opmodeTimer.getElapsedTimeSeconds() > 4) {
                                     clawSubsystem.release();
                                     sampleInBasket=true;
+                                    follower.followPath(scorePickup1, true);
                                     setPathState(4);
                                 }
                             }
@@ -214,8 +208,12 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                 break;
 
             case 4:
+                /*
                 // move first sample to dumping place
-                /*follower.followPath(scorePickup1, true);
+                //follower.followPath(scorePickup1, true);
+                // move this follower command to Case 3 before setPathState(4)
+                */
+
                 if(clawSubsystem.height != 2) {
                     if (opmodeTimer.getElapsedTimeSeconds() > 1.5) {
                         clawSubsystem.moveUp();
@@ -225,20 +223,9 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                     opmodeTimer.resetTimer();
                     setPathState(5);
                 }
-
-                 */
-                if(clawSubsystem.height != 2) {
-                    clawSubsystem.moveUp();
-                }
-                if (clawSubsystem.getElevatorPosition() <-1000) {
-                    follower.followPath(scorePickup1, true);
-                    opmodeTimer.resetTimer();
-                    setPathState(5);
-                    //telemetry.addData("PathState", "1");
-                }
                 break;
             case 5:
-                // Dump bucket object and move to next position, like case 1
+                // Dump bucket The 1st sample pick up from ground object and move to next position, like case 1
                 if (isNearPose(follower.getPose(), scorePose, 1)){
                     if (sampleInBasket) {
                         if (clawSubsystem.height != 2) {
@@ -278,6 +265,7 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                                 if (opmodeTimer.getElapsedTimeSeconds() >3.5) {
                                     clawSubsystem.release();
                                     sampleInBasket = true;
+                                    follower.followPath(scorePickup2, true);
                                     setPathState(8);
                                 }
                             }
@@ -287,8 +275,7 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                 break;
 
             case 8:
-                /*
-                follower.followPath(scorePickup2, true);
+                //follower.followPath(scorePickup2, true);
                 if(clawSubsystem.height != 2) {
                     if (opmodeTimer.getElapsedTimeSeconds() > 2) {
                         clawSubsystem.moveUp();
@@ -298,22 +285,11 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                     opmodeTimer.resetTimer();
                     setPathState(9);
                     //telemetry.addData("PathState", "1");
-                }*/
-
-                if(clawSubsystem.height != 2) {
-                    clawSubsystem.moveUp();
-                }
-                if (clawSubsystem.getElevatorPosition() <-1000) {
-                    follower.followPath(scorePickup2, true);
-
-                    opmodeTimer.resetTimer();
-                    setPathState(9);
-                    //telemetry.addData("PathState", "1");
                 }
                 break;
 
             case 9:
-                // Dump bucket object and move to next position, like case 1
+                // Dump bucket for 2nd pickup sample object and move to next position, like case 1
                 if (isNearPose(follower.getPose(), scorePose, 1)){
                     if (sampleInBasket) {
                         if (clawSubsystem.height != 2) {
@@ -338,10 +314,14 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                     clawSubsystem.moveDown();
                     follower.followPath(grabPickup3, true);
                     opmodeTimer.resetTimer();
-                    setPathState(11);
+                    setPathState(-1);
+                    /// Stopped at the 3rd picking up sample location to same time
+                    // change to setPathState(11) if there is enough time
+                    // setPathState(11);
                 }
                 break;
 
+            // set to stop at pose 3 to save time Stopped at
             case 11:
 
                 //follower.followPath(grabPickup3, true);
@@ -357,6 +337,7 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                                 if (opmodeTimer.getElapsedTimeSeconds() >3.5) {
                                     clawSubsystem.release();
                                     sampleInBasket = true;
+                                    follower.followPath(scorePickup3, true);
                                     setPathState(12);
                                 }
                             }
@@ -366,8 +347,7 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                 break;
 
             case 12:
-                /*
-                follower.followPath(scorePickup3, true);
+                // follower.followPath(scorePickup3, true);
                 if(clawSubsystem.height != 2) {
                     if (opmodeTimer.getElapsedTimeSeconds() > 2) {
                         clawSubsystem.moveUp();
@@ -378,24 +358,11 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                     setPathState(13);
                     //telemetry.addData("PathState", "1");
                 }
-                */
-
-
-                if(clawSubsystem.height != 2) {
-                    clawSubsystem.moveUp();
-                }
-                if (clawSubsystem.getElevatorPosition() <-1000) {
-                    follower.followPath(scorePickup3, true);
-
-                    opmodeTimer.resetTimer();
-                    setPathState(13);
-                }
-
                 break;
 
 
             case 13:
-
+// Dump the 3rd picking up sample.
                 if (isNearPose(follower.getPose(), scorePose, positionTol)){
                     if (sampleInBasket) {
                         if (clawSubsystem.height != 2) {
@@ -413,18 +380,19 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                 break;
 
             case 14:
-
+// Lower Elevator, follow path to center area
                 if(clawSubsystem.height != 0 && opmodeTimer.getElapsedTimeSeconds() > 1) {
                     // note, change the time to 3 to wait longer time to move.
                     clawSubsystem.grabVertical();
                     clawSubsystem.moveDown();
                     follower.followPath(park, true);
                     opmodeTimer.resetTimer();
-                    setPathState(-1);
+                    setPathState(15);
                 }
                 break;
 
             case 15:
+                // Stop at center area
                 // follower.followPath(park, true);
                 if (isNearPose(follower.getPose(), parkPose, positionTol)) {
                     if (clawSubsystem.height != 0) {
@@ -434,6 +402,38 @@ public class AutoTest3BackUpWorking01102026 extends OpMode {
                     setPathState(-1);
                 }
                 break;
+/*
+            // Disabled Case 15, 16 and 17
+            case 15:
+
+                //follower.followPath(grabPickup3, true);
+                if (isNearPose(follower.getPose(), pickup3Pose, positionTol)) {
+                    if (clawSubsystem.height != 0) {
+                        clawSubsystem.moveDown();
+                        clawSubsystem.grabVertical();
+                    }
+                    if (clawSubsystem.height == 0) {
+                        if (!sampleInBasket) {
+                            if (!sampleInGraber) {
+                                clawSubsystem.grab();
+                                if (opmodeTimer.getElapsedTimeSeconds() >3.5) {
+                                    clawSubsystem.release();
+                                    sampleInBasket = true;
+                                    follower.followPath(scorePickup3, true);
+                                    setPathState(12);
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
+
+
+
+*/
+
+
 
             case -1:
                 telemetry.addData("Status", "Autonomous Complete");
