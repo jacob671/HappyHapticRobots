@@ -1,11 +1,31 @@
-package org.firstinspires.ftc.teamcode;
+
+/*
+package org.firstinspires.ftc.teamcode.Regionals;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
+
+package org.firstinspires.ftc.teamcode.States;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.config.subsystem.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
-import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierCurve;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.BezierLine;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Path;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.PathChain;
@@ -32,7 +52,7 @@ public class AutoTest3 extends OpMode {
     private final Pose pickup2Pose = new Pose(16, 17.98, Math.toRadians(180));
     private final Pose pickup3Pose = new Pose(35., 10.5, 4.7);
     private final Pose parkPose = new Pose(65.3, -14, 1.56);
-      // Paths and subsystems
+    // Paths and subsystems
     private Path scorePreload;
     private PathChain grabPickup1, grabPickup2, grabPickup3, scorePickup1, scorePickup2, scorePickup3, park;
     private ClawSubsystem clawSubsystem;
@@ -144,6 +164,7 @@ public class AutoTest3 extends OpMode {
 
     }
 
+
     private void autonomousPathUpdate() {
         switch (pathState) {
 
@@ -170,7 +191,7 @@ public class AutoTest3 extends OpMode {
                         }
                         else {
 
-                     */
+
                     // elevator is at high position, release bucket object
                     clawSubsystem.bucket();
                     //clawSubsystem.extend();
@@ -205,8 +226,7 @@ public class AutoTest3 extends OpMode {
 
 
   */
-
-
+/*
             case 2:
 // Lower elevator, follow path, and release claw object
                 if (clawSubsystem.height != 0 && opmodeTimer.getElapsedTimeSeconds() > 0.8) {
@@ -219,7 +239,7 @@ public class AutoTest3 extends OpMode {
                 break;
             case 3:
                 // picking up the first sample
-                if (isNearPose(follower.getPose(), pickup1Pose, 1)) {
+                if (isNearPose(follower.getPose(), pickup1Pose, 1.3)) {
 
                     if (clawSubsystem.getElevatorPosition() <= -3900) {
                         clawSubsystem.moveDown();
@@ -266,7 +286,7 @@ public class AutoTest3 extends OpMode {
                         }
                         else {
 
-                     */
+
                     // elevator is at high position, release bucket object
                     clawSubsystem.bucket();
                     sampleInBasket = false;
@@ -334,7 +354,7 @@ public class AutoTest3 extends OpMode {
                         }
                         else {
 
-                     */
+
                     // elevator is at high position, release bucket object
                     clawSubsystem.bucket();
                     sampleInBasket = false;
@@ -347,10 +367,8 @@ public class AutoTest3 extends OpMode {
 
 
             case 10:
-
                 if (clawSubsystem.height != 0 && opmodeTimer.getElapsedTimeSeconds() > 1) {
                     clawSubsystem.grabVertical();
-                    //clawSubsystem.moveDown();
                     follower.followPath(grabPickup3, true);
                     opmodeTimer.resetTimer();
                     setPathState(11);
@@ -358,26 +376,19 @@ public class AutoTest3 extends OpMode {
                 break;
 
             case 11:
-
-                //follower.followPath(grabPickup3, true);
                 if (isNearPose(follower.getPose(), pickup3Pose, 1)) {
-
-
                     if (clawSubsystem.getElevatorPosition() <= -1900) {
                         clawSubsystem.moveDown();
                         clawSubsystem.grabReady();
                     } else {
                         if (!sampleInBasket) {
-
                             clawSubsystem.grab();
                             if (opmodeTimer.getElapsedTimeSeconds() > 3.5) {
                                 clawSubsystem.release();
                                 sampleInBasket = true;
                                 opmodeTimer.resetTimer();
                                 setPathState(12);
-
                             }
-
                         }
                     }
                 }
@@ -386,83 +397,167 @@ public class AutoTest3 extends OpMode {
             case 12:
                 if (clawSubsystem.getElevatorPosition() >= -1400) {
                     if (opmodeTimer.getElapsedTimeSeconds() > 1) {
-
                         clawSubsystem.moveUp();
                     }
                 } else {
                     follower.followPath(scorePickup3, true);
                     opmodeTimer.resetTimer();
                     setPathState(13);
-                    //telemetry.addData("PathState", "1");
                 }
                 break;
 
-
             case 13:
-
                 if (isNearPose(follower.getPose(), scorePose, 1.2)) {
-                    /*
-
-                    if (sampleInBasket) {
-                        if (clawSubsystem.height != 2) {
-                            clawSubsystem.moveUp();
-                        }
-                        else {
-
-                     */
-                    // elevator is at high position, release bucket object
                     clawSubsystem.bucket();
                     sampleInBasket = false;
                     opmodeTimer.resetTimer();
                     setPathState(14);
-
-
                 }
                 break;
 
-
             case 14:
-
                 if (clawSubsystem.height != 0 && opmodeTimer.getElapsedTimeSeconds() > 1) {
-
                     if (clawSubsystem.getElevatorPosition() <= -3000) {
                         clawSubsystem.moveDown();
                         clawSubsystem.extendOriginal();
                     } else {
                         follower.followPath(park, true);
-                        setPathState(-1);
+                        opmodeTimer.resetTimer();
+                        setPathState(15);
                     }
                 }
-
-
                 break;
 
             case 15:
-                // follower.followPath(park, true);
-
                 if (isNearPose(follower.getPose(), parkPose, positionTol)) {
                     if (clawSubsystem.height != 0) {
                         clawSubsystem.moveDown();
                         clawSubsystem.grabReady();
                     }
-                    setPathState(-1);
+                    opmodeTimer.resetTimer();
+                    setPathState(16);
                 }
                 break;
 
-            case -1:
-                telemetry.addData("Status", "Autonomous Complete");
+            case 16:
+                detectAndMoveToYellowBlock();
                 break;
         }
+
+        // Telemetry updates
+        telemetry.addData("Path State", getPathState());
+        telemetry.addData("Robot Position", follower.getPose().toString());
+        telemetry.addData("Elevator Position", clawSubsystem.getElevatorPosition());
+        telemetry.addData("Claw Height", clawSubsystem.height);
+        telemetry.addData("Sample In Basket", sampleInBasket);
+        telemetry.addData("Time Elapsed", opmodeTimer.getElapsedTimeSeconds());
+        telemetry.update();
+    }
+
+
+    private void detectAndMoveToYellowBlock() {
+        for (int attempt = 0; attempt < 3; attempt++) {
+            Mat frame = captureFrame();
+            Rect blockRect = detectYellowBlock(frame);
+            if (blockRect != null) {
+                telemetry.addData("Yellow Block Detected", true);
+                telemetry.addData("Block Position", blockRect.toString());
+                moveRobotToBlock(blockRect);
+                clawSubsystem.grab();
+                telemetry.addData("Block Grabbing", "Success");
+                scoreBlock();
+                telemetry.addData("Block Scoring", "Success");
+                setPathState(-1); // Task completed
+                return;
+            }
+            telemetry.addData("Yellow Block Detected", false);
+            moveRobotRight();
+            telemetry.addData("Attempt", attempt + 1);
+            telemetry.update();
+        }
+        setPathState(-1); // Task failed
+        telemetry.addData("Block Scoring", "Failed");
+    }
+
+    private Mat captureFrame() {
+        Mat frame = new Mat();
+        // Implement your camera frame capture logic here
+        return frame;
+    }
+
+    private Rect detectYellowBlock(Mat frame) {
+        Mat hsv = new Mat();
+        Imgproc.cvtColor(frame, hsv, Imgproc.COLOR_RGB2HSV);
+        Scalar lowerYellow = new Scalar(20, 100, 100);
+        Scalar upperYellow = new Scalar(30, 255, 255);
+        Mat mask = new Mat();
+        Core.inRange(hsv, lowerYellow, upperYellow, mask);
+        List<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(mask, contours, new Mat(), Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+
+        if (!contours.isEmpty()) {
+            MatOfPoint c = contours.get(0); // Assuming the largest contour is the block
+            return Imgproc.boundingRect(c);
+        }
+        return null;
+    }
+
+    private void moveRobotToBlock(Rect rect) {
+        // Implement your logic to move the robot so the camera is above and behind the block
+        // Example:
+        // if (rect.x < frame.width() / 2) {
+        //     // Move left
+        //     driveRobot(-0.5, 0.5);
+        // } else {
+        //     // Move right
+        //     driveRobot(0.5, -0.5);
+        // }
+
+        // if (rect.y < frame.height() / 2) {
+        //     // Move forward
+        //     driveRobot(0.5, 0.5);
+        // } else {
+        //     // Move backward
+        //     driveRobot(-0.5, -0.5);
+        // }
+
+        // Adjust the logic based on your robot's movement
+    }
+
+    private void moveRobotRight() {
+        // Implement your logic to move the robot right by one foot
+        // Example:
+        // driveRobot(0.5, -0.5);
+        // sleep(1000); // Adjust the sleep duration as needed
+    }
+
+    private void scoreBlock() {
+        follower.followPath(scorePickup1, true);
+        opmodeTimer.resetTimer();
+        setPathState(13); // Go back to state 13 to score the block
+    }
+
+    private void grabBlock() {
+        clawSubsystem.extend();
+        clawSubsystem.grab();
+    }
+
+
+    private int getPathState() {
+        // Implement your logic to get the path state
+        return 0;
     }
 
     private void setPathState(int state) {
         pathState = state;
         opmodeTimer.resetTimer();
     }
+
     private boolean isNearPose(Pose current, Pose target, double tolerance) {
         return (Math.abs(current.getX() - target.getX()) < tolerance &&
-                Math.abs(current.getY() - target.getY()) < tolerance) ;
+                Math.abs(current.getY() - target.getY()) < tolerance);
     }
 
-
 }
+
+*/
