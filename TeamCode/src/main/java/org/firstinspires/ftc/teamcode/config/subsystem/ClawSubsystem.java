@@ -27,8 +27,8 @@ public class ClawSubsystem {
     private static final int STARTING_POSITION_TICKS = 0; // Define the starting position
 
     // Servo positions
-    private static final double TURN_GRAB_POSITION = 0.9;
-    private static final double TURN_RELEASE_POSITION = 0.33;
+    private static final double TURN_GRAB_POSITION = 0;
+    private static final double TURN_RELEASE_POSITION = .5;
     private static final double SPIN_GRAB_POSITION = 0.63;
     private static final double SPIN_RELEASE_POSITION = 1.2;
 
@@ -224,7 +224,7 @@ public class ClawSubsystem {
 
     public void grabReady() {
         spinServo.setPosition(SPIN_RELEASE_POSITION);
-        turnServo.setPosition(0.8);
+        turnServo.setPosition(0.1);
     }
 
     public void grabVertical() {
