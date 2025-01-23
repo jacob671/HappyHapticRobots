@@ -8,28 +8,27 @@ public class ClawSubsystem {
 
     // Elevator motor
     private DcMotor upLeftMotor;
-    private DcMotor upRightMotor;
+
     // Claw servos
     private Servo spinServo;
     private Servo turnServo;
     private Servo extendServo;
     private Servo bucketServo;
-    private Servo sweepServo;
 
     // Constants for elevator power
     private static final double ELEVATOR_POWER = 1.0;
     private static final int TICKS_PER_INCH = 100; // Adjust based on your motor and gearing
-    private static final int FULL_LIFT_TICKS = 2150; // Total ticks for full lift height
-    private static final int SMALL_LIFT_TICKS = 1450; // Ticks for small lift height
-    private static final int BIT_LIFT_TICKS = 400; // Ticks for small adjustments
-    private static final int SPICIMENT_RELEASE_TICKS = 950; // Ticks for small adjustments
-    private static final int SPICIMENT_AFTER_RELEASE_TICKS = 1150; // Ticks for small adjustments
+    private static final int FULL_LIFT_TICKS = 4300; // Total ticks for full lift height
+    private static final int SMALL_LIFT_TICKS = 2900; // Ticks for small lift height
+    private static final int BIT_LIFT_TICKS = 800; // Ticks for small adjustments
+    private static final int SPICIMENT_RELEASE_TICKS = 1900; // Ticks for small adjustments
+    private static final int SPICIMENT_AFTER_RELEASE_TICKS = 2300; // Ticks for small adjustments
 
     private static final int STARTING_POSITION_TICKS = 0; // Define the starting position
 
     // Servo positions
-    private static final double TURN_GRAB_POSITION = -0.9;
-    private static final double TURN_RELEASE_POSITION = 0.5;
+    private static final double TURN_GRAB_POSITION = 0.9;
+    private static final double TURN_RELEASE_POSITION = 0.33;
     private static final double SPIN_GRAB_POSITION = 0.63;
     private static final double SPIN_RELEASE_POSITION = 1.2;
 
@@ -44,18 +43,14 @@ public class ClawSubsystem {
     public ClawSubsystem(HardwareMap hardwareMap) {
         // Initialize elevator motor
         upLeftMotor = hardwareMap.get(DcMotor.class, "UpLeftMotor");
-        upLeftMotor = hardwareMap.get(DcMotor.class, "UpRightMotor");
         upLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         upLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        upRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        upRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        upRightMotor.setDirection(DcMotor.Direction.REVERSE);
+
         // Initialize claw servos
         spinServo = hardwareMap.get(Servo.class, "SpinServo");
         turnServo = hardwareMap.get(Servo.class, "TurnServo");
         extendServo = hardwareMap.get(Servo.class, "ExtendServo");
         bucketServo = hardwareMap.get(Servo.class, "bucketServo");
-        sweepServo = hardwareMap.get(Servo.class, "sweepServo");
     }
 
     // Elevator Controls
@@ -130,15 +125,8 @@ public class ClawSubsystem {
 
 
 
-    public void sweep(){
-        sweepServo.setPosition(0.8);
 
 
-    }
-
-    public void backSweep(){
-        sweepServo.setPosition(0.2);
-    }
 
     public void moveBit() {
         int currentPosition = upLeftMotor.getCurrentPosition();
@@ -166,11 +154,7 @@ public class ClawSubsystem {
         int targetPosition = upLeftMotor.getCurrentPosition() + ticks;
         upLeftMotor.setTargetPosition(targetPosition);
         upLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        upLeftMotor.setTargetPosition(targetPosition);
-        upRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        upRightMotor.setPower(ELEVATOR_POWER);
-        upRightMotor.setPower(ELEVATOR_POWER);
+        upLeftMotor.setPower(ELEVATOR_POWER);
 
         new Thread(() -> {
             while (upLeftMotor.isBusy()) {
@@ -197,9 +181,6 @@ public class ClawSubsystem {
     private void moveElevatorToPosition(int targetPosition, int targetHeight) {
         upLeftMotor.setTargetPosition(targetPosition);
         upLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        upRightMotor.setTargetPosition(targetPosition);
-        upRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        upLeftMotor.setPower(ELEVATOR_POWER);
         upLeftMotor.setPower(ELEVATOR_POWER);
 
         new Thread(() -> {
@@ -243,7 +224,7 @@ public class ClawSubsystem {
 
     public void grabReady() {
         spinServo.setPosition(SPIN_RELEASE_POSITION);
-        turnServo.setPosition(0);
+        turnServo.setPosition(0.8);
     }
 
     public void grabVertical() {
