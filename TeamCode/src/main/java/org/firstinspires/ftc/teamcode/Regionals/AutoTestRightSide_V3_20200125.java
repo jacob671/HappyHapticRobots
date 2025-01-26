@@ -29,13 +29,22 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
     private final Pose startPose = new Pose(0, 0, Math.toRadians(0));
     private final Pose placeSpecimenPose = new Pose(30, 12, 0);
 
+    // Change push Ready Path as a curve
+    //        pushReadyPath , this is for the 1st speciman push with a curve path
+
+
+    // afterSpecimanPose is the end of the curve
     private final Pose placeSpecimenPose1 = new Pose(35, 15, 0);
-    private final Pose specimenReayControlPose = new Pose(0, 12, 0);
-    private final Pose afterSpecimenPose = new Pose(28, -20, Math.toRadians(180));
+
+
+    //    private final Pose specimenReayControlPose = new Pose(5, -25, 0);
+//    private final Pose afterSpecimenPose = new Pose(52, -18, Math.toRadians(180));
+
+
+    private final Pose afterSpecimenPose = new Pose(12, -17.4, Math.toRadians(180));
 
     private final Pose specimen1ControlPose = new Pose(60, -26, Math.toRadians(180));
     private final Pose specimen1PushReadyPose = new Pose(32, -32, Math.toRadians(180));
-
     private final Pose specimen1Pose = new Pose(8, -32, Math.toRadians(180));
     // working with x=32
     //private final Pose specimen1Pose = new Pose(20, -32, Math.toRadians(180));
@@ -93,6 +102,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
 
         telemetry.addData("elevator Height", clawSubsystem.height);
         telemetry.addData("elevator Current Positon", clawSubsystem.getElevatorPosition());
+        telemetry.addData("isNearPose(follower.getPose(), placeSpecimenPose, 1)", isNearPose(follower.getPose(), placeSpecimenPose, 1));
         telemetry.update();
     }
 
@@ -100,11 +110,15 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
         placeSpecimenPath = new Path(new BezierLine(new Point(startPose), new Point(placeSpecimenPose)));
         placeSpecimenPath.setLinearHeadingInterpolation(startPose.getHeading(), placeSpecimenPose.getHeading());
 
-//        pushReadyPath = new Path(new BezierLine(new Point(placeSpecimenPose), new Point(afterSpecimenPose)));
-//        pushReadyPath.setLinearHeadingInterpolation(placeSpecimenPose.getHeading(), afterSpecimenPose.getHeading());
-// Change push Ready Path as a curve
-        pushReadyPath = new Path(new BezierCurve(new Point(placeSpecimenPose), new Point(specimenReayControlPose), new Point(afterSpecimenPose)));
+        pushReadyPath = new Path(new BezierLine(new Point(placeSpecimenPose), new Point(afterSpecimenPose)));
         pushReadyPath.setLinearHeadingInterpolation(placeSpecimenPose.getHeading(), afterSpecimenPose.getHeading());
+
+
+// Change push Ready Path as a curve
+
+//        pushReadyPath = new Path(new BezierCurve(new Point(placeSpecimenPose), new Point(specimenReayControlPose), new Point(afterSpecimenPose)));
+//        pushReadyPath.setLinearHeadingInterpolation(placeSpecimenPose.getHeading(), afterSpecimenPose.getHeading());
+
 
         specimen1ReadyPushPath = new Path(new BezierCurve(new Point(afterSpecimenPose), new Point(specimen1ControlPose), new Point(specimen1PushReadyPose)));
         specimen1ReadyPushPath.setLinearHeadingInterpolation(afterSpecimenPose.getHeading(), specimen1PushReadyPose.getHeading());
@@ -154,7 +168,6 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
         //pushPath = new PathChain(specimen1Path, specimen1StrafePath, specimen1PushPath, specimen2Path, specimen2StrafePath, specimen2PushPath, readyForHumanPath1);
         pushSpecimen1Path = new PathChain(specimen1ReadyPushPath, specimen1Path);
         //ww    pushSpecimen1Path = new PathChain(specimen1ReadyPushPath);
-
     }
 
     private void autonomousPathUpdate() {
@@ -162,39 +175,36 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
             case 0: // Initial state
                 if (clawSubsystem.height == 0) {
                     follower.followPath(placeSpecimenPath, true);
-                    clawSubsystem.moveUpSp();
-                    clawSubsystem.extendOriginal();
+                    clawSubsystem.moveUpSpReadyToRelease();
+                    clawSubsystem.grabVertical();
 
-                } else if (clawSubsystem.height == 1) {
+                } else if (clawSubsystem.height == 200) {
                     setPathState(1);
                 }
                 break;
             case 1: // Place specimen
-                if (isNearPose(follower.getPose(), placeSpecimenPose, 1.5)) {
-                    if (clawSubsystem.height == 1) {
-                        clawSubsystem.moveUpSpDownBit();
+                if (isNearPose(follower.getPose(), placeSpecimenPose, 1)) {
+                    if (clawSubsystem.height == 200) {
+                        clawSubsystem.moveDownSpToRelease();
                         // elevatorUp = false;
                         // opmodeTimer.resetTimer();
                         // setPathState(-1);
-                    } else if (clawSubsystem.height == 9) {
-                        clawSubsystem.moveUpSpDownBitThenUp();
-                        //setPathState(-1);
-                    } else if (clawSubsystem.height == 11) {
+                    }
+                }
+
+                if (clawSubsystem.height == 300) {
                         // if (opmodeTimer.getElapsedTimeSeconds() > 0.5) {
                         follower.followPath(pushReadyPath, true);
                         // Move to a point and turn direction
-                        setPathState(2);
-
-                    }
-
+                        setPathState(-1);
                 }
                 break;
 
             case 2: // Push First sample, and stop
+                if (clawSubsystem.height != 100) {
+                    clawSubsystem.moveToPickingReady();
+                }
                 if (isNearPose(follower.getPose(), afterSpecimenPose, 1.5)) {
-                    if (clawSubsystem.height != 0) {
-                        clawSubsystem.moveDownSp();
-                    }
                     // clawSubsystem.moveDownSp();
                     follower.followPath(pushSpecimen1Path, true);
                     opmodeTimer.resetTimer();

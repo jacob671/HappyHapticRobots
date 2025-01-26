@@ -26,12 +26,12 @@ public class AutoTest4 extends OpMode {
 
     // Starting and target positions
     private final Pose startPose = new Pose(0, 0, Math.toRadians(0));
-    private Pose placeSpecimenPose = new Pose(30, 12, 0);
+    private Pose placeSpecimenPose = new Pose(28, 12, 0);
     private Pose placeSpecimenPose1 = new Pose(35, 15, 0);
     private final Pose afterSpecimenPose = new Pose(12, -17.4, 0);
     private final Pose specimen1Pose = new Pose(44, -23.4, 0);
     private final Pose specimen1StrafePose = new Pose(52, -30, 0);
-    private final Pose specimen1PushPose = new Pose(14, -30, 0);
+    private final Pose specimen1PushPose = new Pose(12, -30, 0);
     private final Pose specimen2Pose = new Pose(25, -26, 0);
     private final Pose specimen2StrafePose = new Pose(58, -37, 0);
     private final Pose specimen2PushPose = new Pose(24, -37, 0);
@@ -137,9 +137,10 @@ public class AutoTest4 extends OpMode {
                 if (clawSubsystem.height == 0) {
                     follower.followPath(placeSpecimenPath, true);
                     clawSubsystem.moveUpSp();
-                    clawSubsystem.extendOriginal();
+                    clawSubsystem.grabReady();
 
-                } else if (clawSubsystem.height == 1) {
+                } else if (clawSubsystem.getElevatorPosition() < -100) {
+                    opmodeTimer.resetTimer();
                     setPathState(1);
                 }
                 break;
@@ -150,9 +151,12 @@ public class AutoTest4 extends OpMode {
                         // elevatorUp = false;
                         // opmodeTimer.resetTimer();
                         // setPathState(-1);
-                    } else if (clawSubsystem.height == 9) {
+                    } else if (opmodeTimer.getElapsedTimeSeconds()>2) {
                         clawSubsystem.moveUpSpDownBitThenUp();
+                        follower.followPath(pushReadyPath, true);
+                        setPathState(3);
                         //setPathState(-1);
+                        /*
                     } else if (clawSubsystem.height == 11) {
                         // if (opmodeTimer.getElapsedTimeSeconds() > 0.5) {
                         follower.followPath(pushReadyPath, true);
@@ -160,13 +164,15 @@ public class AutoTest4 extends OpMode {
                         // clawSubsystem.height = 1;
                         setPathState(3);
 
+                         */
+
                     }
 
                 }
                 break;
 
             case 3: // Ready for next phase
-                if (isNearPose(follower.getPose(), afterSpecimenPose, 1.5)) {
+                if (isNearPose(follower.getPose(), afterSpecimenPose, 1)) {
                     if (clawSubsystem.height != 0) {
                         clawSubsystem.moveDownSp();
                     }
@@ -178,7 +184,8 @@ public class AutoTest4 extends OpMode {
                 break;
 
             case 5: // Ready for human interaction
-                if (isNearPose(follower.getPose(), readyForHuman, 1.5)) {
+                if (isNearPose(follower.getPose(), readyForHuman, 1)) {
+                    if (opmodeTimer.getElapsedTimeSeconds()>0.5)
                     follower.followPath(getSpeciPath, true);
                     opmodeTimer.resetTimer();
                     // clawSubsystem.height = 0;
@@ -253,7 +260,7 @@ public class AutoTest4 extends OpMode {
 
                 break;
             case 14: // Back to play area
-                if (opmodeTimer.getElapsedTimeSeconds() > 1.3) {
+                if (opmodeTimer.getElapsedTimeSeconds() > 1) {
                     clawSubsystem.moveDownSp();
                     follower.followPath(getSpeciPath, true);
                     opmodeTimer.resetTimer();

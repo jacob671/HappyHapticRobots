@@ -8,29 +8,39 @@ public class ClawSubsystem {
 
     // Elevator motor
     private DcMotor upLeftMotor;
-
+    private DcMotor upRightMotor;
     // Claw servos
     private Servo spinServo;
     private Servo turnServo;
     private Servo extendServo;
     private Servo bucketServo;
-
+    private Servo sweepServo;
     // Constants for elevator power
     private static final double ELEVATOR_POWER = 1.0;
     private static final int TICKS_PER_INCH = 100; // Adjust based on your motor and gearing
-    private static final int FULL_LIFT_TICKS = 4300; // Total ticks for full lift height
-    private static final int SMALL_LIFT_TICKS = 2900; // Ticks for small lift height
-    private static final int BIT_LIFT_TICKS = 800; // Ticks for small adjustments
-    private static final int SPICIMENT_RELEASE_TICKS = 1900; // Ticks for small adjustments
-    private static final int SPICIMENT_AFTER_RELEASE_TICKS = 2300; // Ticks for small adjustments
+    private static final int FULL_LIFT_TICKS = 2100; // Total ticks for full lift height
+    private static final int SMALL_LIFT_TICKS = 1550; // Ticks for small lift height
+
+    private static final int New_SPICIMENT_PICKING_READY_TICKS = 150;
+    private static final int New_SPICIMENT_READY_TO_RELEASE_TICKS = 1750; // Ticks for small lift height
+    private static final int New_SPICIMENT_RELESED_TICKS = 1050; // release spiciment at new attachemnt
+
+    private static final int BIT_LIFT_TICKS = 400; // Ticks for small adjustments
+    private static final int SPICIMENT_RELEASE_TICKS = 975; // Ticks for small adjustments
+    private static final int SPICIMENT_AFTER_RELEASE_TICKS = 1150; // Ticks for small adjustments
 
     private static final int STARTING_POSITION_TICKS = 0; // Define the starting position
 
     // Servo positions
-    private static final double TURN_GRAB_POSITION = 0.9;
-    private static final double TURN_RELEASE_POSITION = 0.33;
-    private static final double SPIN_GRAB_POSITION = 0.63;
-    private static final double SPIN_RELEASE_POSITION = 1.2;
+    private static final double TURN_GRAB_POSITION = 0.04;
+    private static final double TURN_RELEASE_POSITION = 0.57;
+    private static final double TURN_VERTICAL_POSITION = 0.5;
+    private static final double TURN_READY_POSITION = 0.15;
+
+
+
+    private static final double SPIN_GRAB_POSITION = 0.53;
+    private static final double SPIN_RELEASE_POSITION = 1;
 
     private static final double BUCKET_DUMP_POSITION = 0.1;
     private static final double BUCKET_NEUTRAL_POSITION = 0.5;
@@ -46,12 +56,18 @@ public class ClawSubsystem {
         upLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         upLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        upRightMotor = hardwareMap.get(DcMotor.class, "UpRightMotor");
+        upRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        upRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // Initialize claw servos
         spinServo = hardwareMap.get(Servo.class, "SpinServo");
         turnServo = hardwareMap.get(Servo.class, "TurnServo");
         extendServo = hardwareMap.get(Servo.class, "ExtendServo");
         bucketServo = hardwareMap.get(Servo.class, "bucketServo");
+        sweepServo = hardwareMap.get(Servo.class, "sweepServo");
+
     }
+
 
     // Elevator Controls
     public void moveUp() {
@@ -73,6 +89,32 @@ public class ClawSubsystem {
             liftControlActive = true;
             //moveElevator(-SMALL_LIFT_TICKS, 1); // Set height to 1 for small lift
             moveElevatorToPosition(-SMALL_LIFT_TICKS, 1);
+        }
+    }
+
+
+    public void moveToPickingReady() {
+        // at ready to pick, target height is 100.
+        if (!liftControlActive) {
+            liftControlActive = true;
+            moveElevatorToPosition(-New_SPICIMENT_PICKING_READY_TICKS, 100);
+        }
+    }
+
+    public void moveUpSpReadyToRelease() {
+        // at ready to release, target height is 200
+        if (!liftControlActive) {
+            liftControlActive = true;
+            moveElevatorToPosition(-New_SPICIMENT_READY_TO_RELEASE_TICKS, 200);
+        }
+    }
+
+
+    public void moveDownSpToRelease() {
+        // after release, target height is 300
+        if (!liftControlActive) {
+            liftControlActive = true;
+            moveElevatorToPosition(-New_SPICIMENT_RELESED_TICKS, 300);
         }
     }
 
@@ -124,12 +166,8 @@ public class ClawSubsystem {
     }
 
 
-
-
-
-
     public void moveBit() {
-        int currentPosition = upLeftMotor.getCurrentPosition();
+        int currentPosition = (upLeftMotor.getCurrentPosition()+upRightMotor.getCurrentPosition())/2;
         int targetDownPosition = currentPosition + BIT_LIFT_TICKS;
 
         moveElevatorToPosition(targetDownPosition, height);
@@ -151,9 +189,13 @@ public class ClawSubsystem {
     }
 
     private void moveElevator(int ticks, int targetHeight) {
-        int targetPosition = upLeftMotor.getCurrentPosition() + ticks;
+        int targetPosition = (upLeftMotor.getCurrentPosition() +upRightMotor.getCurrentPosition())/2 + ticks;
         upLeftMotor.setTargetPosition(targetPosition);
         upLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        upRightMotor.setTargetPosition(-targetPosition);
+        upRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        upRightMotor.setPower(-ELEVATOR_POWER);
         upLeftMotor.setPower(ELEVATOR_POWER);
 
         new Thread(() -> {
@@ -165,7 +207,7 @@ public class ClawSubsystem {
                 }
             }
             // Check if the current position is close enough to the target position
-            if (Math.abs(upLeftMotor.getCurrentPosition() - targetPosition) <= 20) {
+            if (Math.abs((upLeftMotor.getCurrentPosition() ) - targetPosition) <= 10) {
                 height = targetHeight; // Update height only if the target position is reached
             } else {
                 // Handle or log failure to reach target position
@@ -181,6 +223,9 @@ public class ClawSubsystem {
     private void moveElevatorToPosition(int targetPosition, int targetHeight) {
         upLeftMotor.setTargetPosition(targetPosition);
         upLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        upRightMotor.setTargetPosition(-targetPosition);
+        upRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        upRightMotor.setPower(-ELEVATOR_POWER);
         upLeftMotor.setPower(ELEVATOR_POWER);
 
         new Thread(() -> {
@@ -208,6 +253,8 @@ public class ClawSubsystem {
     public void stopElevator() {
         upLeftMotor.setPower(0);
         upLeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        upRightMotor.setPower(0);
+        upRightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftControlActive = false;
     }
 
@@ -223,21 +270,30 @@ public class ClawSubsystem {
     }
 
     public void grabReady() {
+        turnServo.setPosition(TURN_GRAB_POSITION);
         spinServo.setPosition(SPIN_RELEASE_POSITION);
-        turnServo.setPosition(0.8);
+        turnServo.setPosition(TURN_READY_POSITION);
     }
 
     public void grabVertical() {
         extendServo.setPosition(EXTEND_ORIGINAL_POSITION);
-        turnServo.setPosition(0.5);
-
-
+        turnServo.setPosition(TURN_VERTICAL_POSITION);
     }
 
     public void reset() {
-        turnServo.setPosition(0.9);
+        turnServo.setPosition(TURN_GRAB_POSITION);
 
         spinServo.setPosition(SPIN_RELEASE_POSITION);
+
+    }
+
+
+    public void sweep(){
+        sweepServo.setPosition(0.9);
+
+    }
+    public void sweepBack(){
+        sweepServo.setPosition(0.2);
 
     }
 
@@ -248,7 +304,7 @@ public class ClawSubsystem {
 
     public void extendOriginal() {
         extendServo.setPosition(EXTEND_ORIGINAL_POSITION);
-        turnServo.setPosition(0.5);
+        turnServo.setPosition(0.3);
     }
 
     // Utility to delay actions

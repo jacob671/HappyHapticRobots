@@ -54,6 +54,7 @@ public class TeleOpV2 extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+
             if (!isNavigating) {
                 if (!isGrabbing) {
                     // Manual driving control
@@ -76,10 +77,10 @@ public class TeleOpV2 extends LinearOpMode {
                     backRightMotor.setPower(backRightPower);
                 } else if (isGrabbing) {
 
-                    double y =  gamepad1.left_stick_y;
-                    double x = -gamepad1.left_stick_x ;
+                    double y =  gamepad1.left_stick_y*1.4;
+                    double x = -gamepad1.left_stick_x*0.8 ;
                     double rx = gamepad1.right_stick_x*0.8;
-                    double y2 = -gamepad2.left_stick_y;
+                    double y2 = -gamepad2.left_stick_y*0.8;
                     double denominator = Math.max((Math.abs(y) + Math.abs(x) + Math.abs(rx))*divisor, 1 * divisor);
 
                     double frontLeftPower = (y + x + rx) / denominator;
@@ -183,7 +184,7 @@ public class TeleOpV2 extends LinearOpMode {
 
             }
             if (gamepad1.x) {
-                clawSubsystem.backSweep();
+                clawSubsystem.sweepBack();
             }
 
             telemetry.addData("Front Left Power", frontLeftMotor.getPower());
