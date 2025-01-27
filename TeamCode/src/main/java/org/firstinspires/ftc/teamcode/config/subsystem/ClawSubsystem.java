@@ -39,7 +39,7 @@ public class ClawSubsystem {
 
 
 
-    private static final double SPIN_GRAB_POSITION = 0.53;
+    private static final double SPIN_GRAB_POSITION = 0.485;
     private static final double SPIN_RELEASE_POSITION = 1;
 
     private static final double BUCKET_DUMP_POSITION = 0.1;
