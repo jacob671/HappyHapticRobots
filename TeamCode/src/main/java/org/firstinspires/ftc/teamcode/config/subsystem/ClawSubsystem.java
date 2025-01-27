@@ -18,7 +18,7 @@ public class ClawSubsystem {
     // Constants for elevator power
     private static final double ELEVATOR_POWER = 1.0;
     private static final int TICKS_PER_INCH = 100; // Adjust based on your motor and gearing
-    private static final int FULL_LIFT_TICKS = 2100; // Total ticks for full lift height
+    private static final int FULL_LIFT_TICKS = 2150; // Total ticks for full lift height
     private static final int SMALL_LIFT_TICKS = 1550; // Ticks for small lift height
 
     private static final int New_SPICIMENT_PICKING_READY_TICKS = 150;
@@ -48,7 +48,8 @@ public class ClawSubsystem {
 
     // Current state tracking
     private boolean liftControlActive = false;
-    public int height = 0; // 0 = down, 1 = specimen height, 2 = full elevator height
+    public int height = 0;
+    // 0 = down, 1 = specimen height, 2 = full elevator height
 
     public ClawSubsystem(HardwareMap hardwareMap) {
         // Initialize elevator motor

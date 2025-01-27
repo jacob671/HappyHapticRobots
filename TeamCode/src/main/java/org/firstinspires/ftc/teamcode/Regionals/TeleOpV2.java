@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
+import java.util.TimerTask;
+
 @TeleOp(name = "TeleOpV2", group = "Linear Opmode")
 public class TeleOpV2 extends LinearOpMode {
 
@@ -134,6 +136,10 @@ public class TeleOpV2 extends LinearOpMode {
 
             } else if (gamepad2.right_trigger > 0.4 && !liftControlActive) {
                 clawSubsystem.moveUp();
+
+
+
+
             }
             if (gamepad1.b){
                 isGrabbing = true;
