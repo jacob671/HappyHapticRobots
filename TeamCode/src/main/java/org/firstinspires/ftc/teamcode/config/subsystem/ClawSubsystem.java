@@ -23,7 +23,7 @@ public class ClawSubsystem {
 
     private static final int New_SPICIMENT_PICKING_READY_TICKS = 150;
     private static final int New_SPICIMENT_READY_TO_RELEASE_TICKS = 1750; // Ticks for small lift height
-    private static final int New_SPICIMENT_RELESED_TICKS = 1050; // release spiciment at new attachemnt
+    private static final int New_SPICIMENT_RELESED_TICKS = 1120; // release spiciment at new attachemnt
 
     private static final int BIT_LIFT_TICKS = 400; // Ticks for small adjustments
     private static final int SPICIMENT_RELEASE_TICKS = 975; // Ticks for small adjustments
@@ -33,13 +33,13 @@ public class ClawSubsystem {
 
     // Servo positions
     private static final double TURN_GRAB_POSITION = 0.04;
-    private static final double TURN_RELEASE_POSITION = 0.57;
+    private static final double TURN_RELEASE_POSITION = 0.54;
     private static final double TURN_VERTICAL_POSITION = 0.5;
     private static final double TURN_READY_POSITION = 0.15;
 
 
 
-    private static final double SPIN_GRAB_POSITION = 0.485;
+    private static final double SPIN_GRAB_POSITION = 0.475;
     private static final double SPIN_RELEASE_POSITION = 1;
 
     private static final double BUCKET_DUMP_POSITION = 0.1;
@@ -272,7 +272,7 @@ public class ClawSubsystem {
 
     public void grabReady() {
         turnServo.setPosition(TURN_GRAB_POSITION);
-        spinServo.setPosition(SPIN_RELEASE_POSITION);
+       // spinServo.setPosition(SPIN_RELEASE_POSITION);
         turnServo.setPosition(TURN_READY_POSITION);
     }
 
@@ -300,7 +300,7 @@ public class ClawSubsystem {
 
     public void release() {
         turnServo.setPosition(TURN_RELEASE_POSITION);
-        delayAction(() -> spinServo.setPosition(SPIN_RELEASE_POSITION), 700);
+        delayAction(() -> spinServo.setPosition(SPIN_RELEASE_POSITION), 900);
     }
 
     public void extendOriginal() {

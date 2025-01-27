@@ -49,13 +49,13 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
     // working with x=32
     //private final Pose specimen1Pose = new Pose(20, -32, Math.toRadians(180));
 
-    private final Pose specimen1StrafePose = new Pose(52, -30, 0);
+    private final Pose specimen1StrafePose = new Pose(52, -30, Math.toRadians(180));
 
 
-    private final Pose specimen1PushPose = new Pose(14, -30, 0);
-    private final Pose specimen2Pose = new Pose(25, -26, 0);
-    private final Pose specimen2StrafePose = new Pose(58, -37, 0);
-    private final Pose specimen2PushPose = new Pose(24, -37, 0);
+    private final Pose specimen1PushPose = new Pose(14, -30, Math.toRadians(180));
+    private final Pose specimen2Pose = new Pose(25, -26, Math.toRadians(180));
+    private final Pose specimen2StrafePose = new Pose(58, -37, Math.toRadians(180));
+    private final Pose specimen2PushPose = new Pose(24, -37, Math.toRadians(180));
     private final Pose readyForHuman = new Pose(10, -20.8, Math.toRadians(180));
     private final Pose humanPlayerZonePose = new Pose(-6, -20.8, Math.toRadians(180));
     private final Pose humanPlayerZonebackPose = new Pose(3, -20.8, Math.toRadians(180));
@@ -196,45 +196,42 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
                         // if (opmodeTimer.getElapsedTimeSeconds() > 0.5) {
                         follower.followPath(pushReadyPath, true);
                         // Move to a point and turn direction
-                        setPathState(-1);
+                        setPathState(2);
                 }
                 break;
 
             case 2: // Push First sample, and stop
-                if (clawSubsystem.height != 100) {
-                    clawSubsystem.moveToPickingReady();
-                }
+
                 if (isNearPose(follower.getPose(), afterSpecimenPose, 1.5)) {
                     // clawSubsystem.moveDownSp();
-                    follower.followPath(pushSpecimen1Path, true);
+                    clawSubsystem.moveToPickingReady();
+                    follower.followPath(pushPath, true);
                     opmodeTimer.resetTimer();
-                    setPathState(-1);
+                    setPathState(5);
                 }
                 break;
 
 // Stop here
             case 3: // Ready for next phase
-                if (isNearPose(follower.getPose(), afterSpecimenPose, 1.5)) {
-                    if (clawSubsystem.height != 0) {
-                        clawSubsystem.moveDownSp();
-                    }
+                if (isNearPose(follower.getPose(), readyForHuman, 1)) {
+
                     // clawSubsystem.moveDownSp();
                     //follower.followPath(pushPath, true);
                     follower.followPath(pushSpecimen1Path, true);
                     opmodeTimer.resetTimer();
-                    setPathState(-1);
+                    setPathState(5);
                 }
                 break;
                 // Stop at the back position
 
             case 5: // Ready for human interaction
-                if (isNearPose(follower.getPose(), readyForHuman, 1.5)) {
+                if (isNearPose(follower.getPose(), readyForHuman, 1)) {
                     follower.followPath(getSpeciPath, true);
                     opmodeTimer.resetTimer();
                     // clawSubsystem.height = 0;
                     clawSubsystem.moveDownSp();
                     opmodeTimer.resetTimer();
-                    setPathState(12);
+                    setPathState(-1);
                 }
                 break;
             case 12: // Back to play area
