@@ -19,14 +19,14 @@ public class ClawSubsystem {
     private static final double ELEVATOR_POWER = 1.0;
     private static final int TICKS_PER_INCH = 100; // Adjust based on your motor and gearing
     private static final int FULL_LIFT_TICKS = 2150; // Total ticks for full lift height
-    private static final int SMALL_LIFT_TICKS = 1550; // Ticks for small lift height
+    private static final int SMALL_LIFT_TICKS = 1800; // Ticks for small lift height
 
-    private static final int New_SPICIMENT_PICKING_READY_TICKS = 150;
-    private static final int New_SPICIMENT_READY_TO_RELEASE_TICKS = 1750; // Ticks for small lift height
-    private static final int New_SPICIMENT_RELESED_TICKS = 1120; // release spiciment at new attachemnt
+    private static final int New_SPICIMENT_PICKING_READY_TICKS = 340;
+    private static final int New_SPICIMENT_READY_TO_RELEASE_TICKS = 1800; // Ticks for small lift height
+    private static final int New_SPICIMENT_RELESED_TICKS = 1050; // release spiciment at new attachemnt
 
     private static final int BIT_LIFT_TICKS = 400; // Ticks for small adjustments
-    private static final int SPICIMENT_RELEASE_TICKS = 975; // Ticks for small adjustments
+    private static final int SPICIMENT_RELEASE_TICKS = 5; // Ticks for small adjustments
     private static final int SPICIMENT_AFTER_RELEASE_TICKS = 1150; // Ticks for small adjustments
 
     private static final int STARTING_POSITION_TICKS = 0; // Define the starting position
@@ -39,8 +39,8 @@ public class ClawSubsystem {
 
 
 
-    private static final double SPIN_GRAB_POSITION = 0.475;
-    private static final double SPIN_RELEASE_POSITION = 1;
+    private static final double SPIN_GRAB_POSITION = .63;
+    private static final double SPIN_RELEASE_POSITION = .2;
 
     private static final double BUCKET_DUMP_POSITION = 0.1;
     private static final double BUCKET_NEUTRAL_POSITION = 0.5;
@@ -271,7 +271,7 @@ public class ClawSubsystem {
     }
 
     public void grabReady() {
-        turnServo.setPosition(TURN_GRAB_POSITION);
+        //turnServo.setPosition(TURN_GRAB_POSITION);
        // spinServo.setPosition(SPIN_RELEASE_POSITION);
         turnServo.setPosition(TURN_READY_POSITION);
     }
