@@ -124,7 +124,8 @@ public class TeleOpV2 extends LinearOpMode {
                 //navigateTo(parkPose);
             }
             if(gamepad2.y){
-               clawSubsystem.moveBit();
+
+               //clawSubsystem.moveBit();
 
             }
 
@@ -185,13 +186,11 @@ public class TeleOpV2 extends LinearOpMode {
                 clawSubsystem.moveDownSp();
             }
 
-            if (gamepad1.a) {
+            if (gamepad2.y) {
                 clawSubsystem.sweep();
 
             }
-            if (gamepad1.x) {
-                clawSubsystem.sweepBack();
-            }
+
 
             telemetry.addData("Front Left Power", frontLeftMotor.getPower());
             telemetry.addData("Back Left Power", backLeftMotor.getPower());

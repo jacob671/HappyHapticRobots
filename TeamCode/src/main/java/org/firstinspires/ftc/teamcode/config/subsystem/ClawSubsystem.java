@@ -23,7 +23,7 @@ public class ClawSubsystem {
 
     private static final int New_SPICIMENT_PICKING_READY_TICKS = 340;
     private static final int New_SPICIMENT_READY_TO_RELEASE_TICKS = 1800; // Ticks for small lift height
-    private static final int New_SPICIMENT_RELESED_TICKS = 1050; // release spiciment at new attachemnt
+    private static final int New_SPICIMENT_RELESED_TICKS = 1100; // release spiciment at new attachemnt
 
     private static final int BIT_LIFT_TICKS = 400; // Ticks for small adjustments
     private static final int SPICIMENT_RELEASE_TICKS = 5; // Ticks for small adjustments
@@ -33,7 +33,7 @@ public class ClawSubsystem {
 
     // Servo positions
     private static final double TURN_GRAB_POSITION = 0.04;
-    private static final double TURN_RELEASE_POSITION = 0.54;
+    private static final double TURN_RELEASE_POSITION = 0.58;
     private static final double TURN_VERTICAL_POSITION = 0.5;
     private static final double TURN_READY_POSITION = 0.15;
 
@@ -158,7 +158,7 @@ public class ClawSubsystem {
         }
     }
     public void extend() {
-        extendServo.setPosition(0.8);
+        extendServo.setPosition(0.7);
 
     }
     public void retract() {
@@ -265,9 +265,16 @@ public class ClawSubsystem {
         delayAction(() -> bucketServo.setPosition(BUCKET_NEUTRAL_POSITION), 1000);
     }
 
+    public void bucketHold() {
+        bucketServo.setPosition(0);
+
+    }
+
     public void grab() {
         turnServo.setPosition(TURN_GRAB_POSITION);
-        delayAction(() -> spinServo.setPosition(SPIN_GRAB_POSITION), 100);
+       // delayAction(() ->
+        spinServo.setPosition(SPIN_GRAB_POSITION);
+                //, 100);
     }
 
     public void grabReady() {
@@ -283,19 +290,17 @@ public class ClawSubsystem {
 
     public void reset() {
         turnServo.setPosition(TURN_GRAB_POSITION);
-
         spinServo.setPosition(SPIN_RELEASE_POSITION);
-
     }
 
 
     public void sweep(){
-        sweepServo.setPosition(0.9);
-
+        sweepServo.setPosition(0.45);
+        delayAction(() -> sweepServo.setPosition(0.05), 500);
     }
-    public void sweepBack(){
-        sweepServo.setPosition(0.2);
 
+    public void sweepBack(){
+        sweepServo.setPosition(0.05);
     }
 
     public void release() {
@@ -307,6 +312,19 @@ public class ClawSubsystem {
         extendServo.setPosition(EXTEND_ORIGINAL_POSITION);
         turnServo.setPosition(0.3);
     }
+
+
+    // Claw and bucket controls
+    public void pickandDumpRightSamples() {
+        grab();
+        delayAction(() -> release(), 500);
+        delayAction(() -> grabVertical(), 500);
+        delayAction(() -> bucket(), 500);
+
+
+        //delayAction(() -> bucketServo.setPosition(BUCKET_NEUTRAL_POSITION), 1000);
+    }
+
 
     // Utility to delay actions
     private void delayAction(Runnable action, long delay) {
