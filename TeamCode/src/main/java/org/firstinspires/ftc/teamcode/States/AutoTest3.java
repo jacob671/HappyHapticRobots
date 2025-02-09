@@ -29,7 +29,7 @@ public class AutoTest3 extends OpMode {
     private final Pose scorePose = new Pose(6, 17.7, 2.37);
     private final Pose pickup1Pose = new Pose(15.8, 9, 3.15);
     private final Pose pickup2Pose = new Pose(15.3, 19.2, Math.toRadians(180));
-    private final Pose pickup3Pose = new Pose(34.8, 10.6, 4.7);
+    private final Pose pickup3Pose = new Pose(34, 10.6, 4.7);
     private final Pose parkPose = new Pose(70.3, -14, 4.64);
       // Paths and subsystems
     private Path scorePreload;
@@ -175,7 +175,7 @@ public class AutoTest3 extends OpMode {
 
                      */
                     // elevator is at high position, release bucket object
-                    if (opmodeTimer.getElapsedTimeSeconds() > 1) {
+                    if (opmodeTimer.getElapsedTimeSeconds() > 1.2) {
                         clawSubsystem.bucket();
                         clawSubsystem.grabReady();
 
@@ -371,7 +371,7 @@ public class AutoTest3 extends OpMode {
             case 11:
 
                 //follower.followPath(grabPickup3, true);
-                if (isNearPose(follower.getPose(), pickup3Pose, 1.3)) {
+                if (isNearPose(follower.getPose(), pickup3Pose, 1.6)) {
 
 
                     if (clawSubsystem.getElevatorPosition() <= -1900) {

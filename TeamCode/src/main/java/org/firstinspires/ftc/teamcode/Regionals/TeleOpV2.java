@@ -25,6 +25,7 @@ public class TeleOpV2 extends LinearOpMode {
     private boolean bucketControlActive = false;
     private boolean isNavigating = false;
     private boolean isGrabbing = false;
+    private boolean specimenInGrabber;
     private double divisor = 1;
     private static final double SERVO_MIN = 0.2;
     private static final double SERVO_MAX = 0.7;
@@ -169,8 +170,10 @@ public class TeleOpV2 extends LinearOpMode {
             if (gamepad2.a){
                 UpRightMotor.setPower(-1);
                 UpLeftMotor.setPower(1);
+
             }
             if (gamepad2.b){
+
                 UpRightMotor.setPower(0);
                 UpLeftMotor.setPower(0);
             }
@@ -181,10 +184,22 @@ public class TeleOpV2 extends LinearOpMode {
             }
 
             if (gamepad2.left_bumper) {
+
                 clawSubsystem.extendOriginal();
 
-                clawSubsystem.moveDownSp();
+                clawSubsystem.moveDownSpToRelease();
+                specimenInGrabber = false;
             }
+            if (gamepad2.dpad_down){
+                    clawSubsystem.extendOriginal();
+
+                    clawSubsystem.moveToPickingReady();
+                    specimenInGrabber = true;
+                }
+
+
+
+
 
             if (gamepad2.y) {
                 clawSubsystem.sweep();
