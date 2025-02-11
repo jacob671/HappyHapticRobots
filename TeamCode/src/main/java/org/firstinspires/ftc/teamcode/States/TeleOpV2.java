@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Regionals;
+package org.firstinspires.ftc.teamcode.States;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -10,8 +10,6 @@ import org.firstinspires.ftc.teamcode.config.subsystem.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.pedroPathing.follower.Follower;
 import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
-
-import java.util.TimerTask;
 
 @TeleOp(name = "TeleOpV2", group = "Linear Opmode")
 public class TeleOpV2 extends LinearOpMode {
@@ -167,6 +165,14 @@ public class TeleOpV2 extends LinearOpMode {
                 isGrabbing = true;
                 clawSubsystem.grab();
             }
+
+            if (gamepad2.dpad_left) {
+                clawSubsystem.grabVertical();
+                clawSubsystem.bucketHold();
+            }
+
+
+
             if (gamepad2.a){
                 UpRightMotor.setPower(-1);
                 UpLeftMotor.setPower(1);

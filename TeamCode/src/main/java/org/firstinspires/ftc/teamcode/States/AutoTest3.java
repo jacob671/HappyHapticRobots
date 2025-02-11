@@ -230,7 +230,7 @@ public class AutoTest3 extends OpMode {
                 // picking up the first sample
                 if (isNearPose(follower.getPose(), pickup1Pose, 1.3)) {
 
-                    if (clawSubsystem.getElevatorPosition() <= -1100) {
+                    if (clawSubsystem.getElevatorPosition() <= -1500) {
                         clawSubsystem.moveDown();
 
                     } else {
@@ -300,7 +300,7 @@ public class AutoTest3 extends OpMode {
             case 7:
                 if (isNearPose(follower.getPose(), pickup2Pose, 1.5)) {
 
-                    if (clawSubsystem.getElevatorPosition() <= -1900) {
+                    if (clawSubsystem.getElevatorPosition() <= -1500) {
                         clawSubsystem.moveDown();
                         clawSubsystem.grabReady();
                     } else {

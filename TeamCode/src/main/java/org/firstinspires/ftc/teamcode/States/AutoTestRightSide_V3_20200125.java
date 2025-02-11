@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Regionals;
+package org.firstinspires.ftc.teamcode.States;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -34,10 +34,10 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
 
 
     // afterSpecimanPose is the end of the curve
-    private Pose placeSpecimenPose1 = new Pose(29.5, 15, 0);
-    private Pose placeSpecimenPose2 = new Pose(29.5, 14, 0);
-    private Pose placeSpecimenPose3 = new Pose(29.5, 13, 0);
-    private Pose placeSpecimenPose4 = new Pose(29.5, 12, 0);
+    private Pose placeSpecimenPose1 = new Pose(29.5, 16, 0);
+    private Pose placeSpecimenPose2 = new Pose(30, 15, 0);
+    private Pose placeSpecimenPose3 = new Pose(30, 14, 0);
+    private Pose placeSpecimenPose4 = new Pose(30.2, 14, 0);
     //    private final Pose specimenReayControlPose = new Pose(5, -25, 0);
 //    private final Pose afterSpecimenPose = new Pose(52, -18, Math.toRadians(180));
 
@@ -322,8 +322,14 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
 
                 break;
             case 14: // Ready for human interaction
+
+                if (isNearPose(follower.getPose(), readyForHuman, 12)) {
+                    clawSubsystem.moveToPickingReady();
+                }
+
                 if (isNearPose(follower.getPose(), readyForHuman, 1)) {
                     clawSubsystem.moveToPickingReady();
+
                     follower.followPath(getSpeciPath, true);
                     opmodeTimer.resetTimer();
                     // clawSubsystem.height = 0;
@@ -403,7 +409,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
                 }
                 break;
             case 21: // Back to play area
-                if (opmodeTimer.getElapsedTimeSeconds() > 0) {
+                if (opmodeTimer.getElapsedTimeSeconds() > 0.5) {
 
 
                     if (clawSubsystem.height == 1) {
@@ -493,7 +499,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
 
             break;
             case 25:
-                if (isNearPose(follower.getPose(), returnHomePose, 1.3)){
+                if (isNearPose(follower.getPose(), returnHomePose, 3)){
                     clawSubsystem.grabVertical();
                     clawSubsystem.moveDown();
                     setPathState(-1);
