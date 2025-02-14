@@ -143,10 +143,11 @@ public class TeleOpV2 extends LinearOpMode {
             }
             if (gamepad1.b){
                 isGrabbing = true;
-
+                divisor=4;
                 clawSubsystem.reset();
             }
             if (gamepad1.right_trigger > 0.51) {
+                isGrabbing = true;
                 clawSubsystem.grabReady();
                 divisor = 4;
                 isGrabbing = true;

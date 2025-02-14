@@ -35,9 +35,9 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
 
     // afterSpecimanPose is the end of the curve
     private Pose placeSpecimenPose1 = new Pose(29.5, 16, 0);
-    private Pose placeSpecimenPose2 = new Pose(30, 15, 0);
-    private Pose placeSpecimenPose3 = new Pose(30, 14, 0);
-    private Pose placeSpecimenPose4 = new Pose(30.2, 14, 0);
+    private Pose placeSpecimenPose2 = new Pose(29.5, 15, 0);
+    private Pose placeSpecimenPose3 = new Pose(29.5, 14.5, 0);
+    private Pose placeSpecimenPose4 = new Pose(29.5, 14, 0);
     //    private final Pose specimenReayControlPose = new Pose(5, -25, 0);
 //    private final Pose afterSpecimenPose = new Pose(52, -18, Math.toRadians(180));
 
@@ -58,7 +58,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
     private final Pose specimen3PushPose = new Pose(24, -50, Math.toRadians(180));
     */
     private final Pose readyForHuman = new Pose(10, -21.8, Math.toRadians(180));
-    private final Pose humanPlayerZonePose = new Pose(-2, -21.8, Math.toRadians(180));
+    private final Pose humanPlayerZonePose = new Pose(-5, -21.8, Math.toRadians(180));
     private final Pose humanPlayerZonebackPose = new Pose(0, -21.8, Math.toRadians(180));
     private final Pose highChamberPose = new Pose(0, 14, 0);
     private final Pose returnHomePose = new Pose(25, 15, 0);
@@ -196,14 +196,11 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
         switch (pathState) {
             case 0: // Initial state
                 if (clawSubsystem.getElevatorPosition() >= -100) {
-
                     clawSubsystem.moveUpSpReadyToRelease();
                 } else {
                     follower.followPath(specimenToHighChamberPath1, true);
                     setPathState(1);
-
                     clawSubsystem.grabVertical();
-
                 }
                 break;
             case 1: // Place specimen
@@ -318,12 +315,12 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
                     }
 
                 }
-
-
                 break;
+
             case 14: // Ready for human interaction
 
-                if (isNearPose(follower.getPose(), readyForHuman, 12)) {
+
+                if (isNearPose(follower.getPose(), readyForHuman, 20)){
                     clawSubsystem.moveToPickingReady();
                 }
 
@@ -397,10 +394,14 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
 
 
                 break;
+            case 20:
+                if (isNearPose(follower.getPose(), readyForHuman, 20)){
+                clawSubsystem.moveToPickingReady();
+            }
 
-            case 20: // Ready for human interaction
+             // Ready for human interaction
                 if (isNearPose(follower.getPose(), readyForHuman, 1)) {
-                    clawSubsystem.moveToPickingReady();
+                //    clawSubsystem.moveToPickingReady();
                     follower.followPath(getSpeciPath, true);
                     opmodeTimer.resetTimer();
                     // clawSubsystem.height = 0;
@@ -409,7 +410,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
                 }
                 break;
             case 21: // Back to play area
-                if (opmodeTimer.getElapsedTimeSeconds() > 0.5) {
+                if (opmodeTimer.getElapsedTimeSeconds() > 0.8) {
 
 
                     if (clawSubsystem.height == 1) {
@@ -502,7 +503,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
                 if (isNearPose(follower.getPose(), returnHomePose, 3)){
                     clawSubsystem.grabVertical();
                     clawSubsystem.moveDown();
-                    setPathState(-1);
+                    //setPathState(-1);
 
                 }
 
