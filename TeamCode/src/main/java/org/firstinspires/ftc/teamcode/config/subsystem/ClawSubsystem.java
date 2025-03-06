@@ -15,6 +15,8 @@ public class ClawSubsystem {
     private Servo extendServo;
     private Servo bucketServo;
     private Servo sweepServo;
+    private Servo specTurnServo;
+    private Servo specGrabServo;
     // Constants for elevator power
     private static final double ELEVATOR_POWER = 1.0;
     private static final int TICKS_PER_INCH = 100; // Adjust based on your motor and gearing
@@ -29,7 +31,7 @@ public class ClawSubsystem {
     private static final int SPICIMENT_RELEASE_TICKS = 5; // Ticks for small adjustments
     private static final int SPICIMENT_AFTER_RELEASE_TICKS = 1150; // Ticks for small adjustments
 
-    private static final int STARTING_POSITION_TICKS = 0; // Define the starting position
+    private static final int STARTING_POSITION_TICKS = 30; // Define the starting position
 
     // Servo positions
     private static final double TURN_GRAB_POSITION = 0.04;
@@ -40,9 +42,10 @@ public class ClawSubsystem {
 
 
     private static final double SPIN_GRAB_POSITION = .69;
-    private static final double SPIN_RELEASE_POSITION = .4;
+    private static final double SPIN_RELEASE_POSITION = .34;
+    private static final double SPIN_complete_POSITION = .15;
 
-    private static final double BUCKET_DUMP_POSITION = 0.13;
+    private static final double BUCKET_DUMP_POSITION = 0.1;
     private static final double BUCKET_NEUTRAL_POSITION = 0.5;
     private static final double EXTEND_ORIGINAL_POSITION = 0.2;
 
@@ -66,11 +69,42 @@ public class ClawSubsystem {
         extendServo = hardwareMap.get(Servo.class, "ExtendServo");
         bucketServo = hardwareMap.get(Servo.class, "bucketServo");
         sweepServo = hardwareMap.get(Servo.class, "sweepServo");
-
+        specTurnServo = hardwareMap.get(Servo.class, "specTurnServo");
+        specGrabServo = hardwareMap.get(Servo.class, "specGrabServo");
     }
 
 
     // Elevator Controls
+
+
+
+
+    public void grabSpec(){
+        specGrabServo.setPosition(0.1);
+    }
+
+    public void releaseSpec(){
+        specGrabServo.setPosition(.5);
+
+    }
+    public void specReadyForGrab(){
+        specTurnServo.setPosition(0);
+        specGrabServo.setPosition(.5);
+    }
+    public void specReadyForHang(){
+        specTurnServo.setPosition(.7);
+
+
+    }
+
+    public void specHang(){
+        specTurnServo.setPosition(.52);
+
+    }
+
+
+
+
     public void moveUp() {
         if (!liftControlActive) {
             liftControlActive = true;
@@ -239,7 +273,7 @@ public class ClawSubsystem {
             }
 
             // Check if the current position matches the target position
-            if (Math.abs(upLeftMotor.getCurrentPosition() - targetPosition) <= 20) {
+            if (Math.abs(upLeftMotor.getCurrentPosition() - targetPosition) <= 10) {
                 height = targetHeight; // Update height only if the target position is reached
             } else {
                 // Log or handle a failure to reach the target position, if needed
@@ -306,6 +340,10 @@ public class ClawSubsystem {
     public void release() {
         turnServo.setPosition(TURN_RELEASE_POSITION);
         delayAction(() -> spinServo.setPosition(SPIN_RELEASE_POSITION), 900);
+    }
+    public void releaseComplete() {
+        turnServo.setPosition(TURN_RELEASE_POSITION);
+        delayAction(() -> spinServo.setPosition(SPIN_complete_POSITION), 900);
     }
 
     public void extendOriginal() {

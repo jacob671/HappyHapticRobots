@@ -34,30 +34,30 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
 
 
     // afterSpecimanPose is the end of the curve
-    private Pose placeSpecimenPose1 = new Pose(29.5, 16, 0);
-    private Pose placeSpecimenPose2 = new Pose(29.5, 15, 0);
-    private Pose placeSpecimenPose3 = new Pose(29.5, 14.5, 0);
-    private Pose placeSpecimenPose4 = new Pose(29.5, 14, 0);
+    private Pose placeSpecimenPose1 = new Pose(28.5, 16, 0);
+    private Pose placeSpecimenPose2 = new Pose(28.7, 15, 0);
+    private Pose placeSpecimenPose3 = new Pose(28.7, 14.5, 0);
+    private Pose placeSpecimenPose4 = new Pose(28.7, 13, 0);
     //    private final Pose specimenReayControlPose = new Pose(5, -25, 0);
 //    private final Pose afterSpecimenPose = new Pose(52, -18, Math.toRadians(180));
 
 
-    private final Pose afterSpecimenPose = new Pose(20, -17.4, Math.toRadians(180));
+    private final Pose afterSpecimenPose = new Pose(17, -17.4, Math.toRadians(180));
 
     private final Pose specimen1ControlPose = new Pose(60, -26, Math.toRadians(180));
     private final Pose specimen1PushReadyPose = new Pose(8.5, -14.2, Math.toRadians(180));
-    private final Pose specimen1Pose = new Pose(45, -25.4, Math.toRadians(180));
+    private final Pose specimen1Pose = new Pose(45, -26, Math.toRadians(180));
     private final Pose specimen1StrafePose = new Pose(48, -29, Math.toRadians(180));
-    private final Pose specimen1PushPose = new Pose(25, -29, Math.toRadians(180));
-    private final Pose specimen2Pose = new Pose(45, -36, Math.toRadians(180));
-    private final Pose specimen2StrafePose = new Pose(48, -40, Math.toRadians(180));
-    private final Pose specimen2PushPose = new Pose(29, -40, Math.toRadians(180));
+    private final Pose specimen1PushPose = new Pose(25, -28, Math.toRadians(180));
+    private final Pose specimen2Pose = new Pose(45, -25, Math.toRadians(180));
+    private final Pose specimen2StrafePose = new Pose(50, -36, Math.toRadians(180));
+    private final Pose specimen2PushPose = new Pose(32, -37, Math.toRadians(180));
     /*
     private final Pose specimen3Pose = new Pose(25, -45, Math.toRadians(180));
     private final Pose specimen3StrafePose = new Pose(54, -53, Math.toRadians(180));
     private final Pose specimen3PushPose = new Pose(24, -50, Math.toRadians(180));
     */
-    private final Pose readyForHuman = new Pose(10, -21.8, Math.toRadians(180));
+    private final Pose readyForHuman = new Pose(6, -21.8, Math.toRadians(180));
     private final Pose humanPlayerZonePose = new Pose(-5, -21.8, Math.toRadians(180));
     private final Pose humanPlayerZonebackPose = new Pose(0, -21.8, Math.toRadians(180));
     private final Pose highChamberPose = new Pose(0, 14, 0);
@@ -250,7 +250,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
                 // Stop at the back position
 
             case 5: // Ready for human interaction
-                if (isNearPose(follower.getPose(), readyForHuman, 1)) {
+                if (isNearPose(follower.getPose(), readyForHuman, 1.3)) {
                     clawSubsystem.moveToPickingReady();
                     follower.followPath(getSpeciPath, true);
                     opmodeTimer.resetTimer();
@@ -324,7 +324,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
                     clawSubsystem.moveToPickingReady();
                 }
 
-                if (isNearPose(follower.getPose(), readyForHuman, 1)) {
+                if (isNearPose(follower.getPose(), readyForHuman, 1.3)) {
                     clawSubsystem.moveToPickingReady();
 
                     follower.followPath(getSpeciPath, true);
@@ -400,7 +400,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
             }
 
              // Ready for human interaction
-                if (isNearPose(follower.getPose(), readyForHuman, 1)) {
+                if (isNearPose(follower.getPose(), readyForHuman, 1.3)) {
                 //    clawSubsystem.moveToPickingReady();
                     follower.followPath(getSpeciPath, true);
                     opmodeTimer.resetTimer();
@@ -424,7 +424,7 @@ public class AutoTestRightSide_V3_20200125 extends OpMode {
                     else {
                         if (opmodeTimer.getElapsedTimeSeconds() > 0.2) {
                             telemetry.addData("Elevator Position", clawSubsystem.getElevatorPosition());
-                            if (clawSubsystem.getElevatorPosition() >= -1000) {
+                            if (clawSubsystem.getElevatorPosition() >= -500) {
                                 telemetry.addData("Status", "Elevator moving up");
                                 clawSubsystem.moveUpSp();
                             } else {

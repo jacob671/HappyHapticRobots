@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.localization.Pose;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.NanoTimer;
+import org.firstinspires.ftc.teamcode.AdaptivePIDController;
 
 /**
  * This is the ThreeWheelIMULocalizer class. This class extends the Localizer superclass and is a
@@ -58,6 +59,8 @@ public class ThreeWheelIMULocalizer extends Localizer {
     private Pose leftEncoderPose;
     private Pose rightEncoderPose;
     private Pose strafeEncoderPose;
+    private AdaptivePIDController adaptivePIDController;
+
 
     public final IMU imu;
     private double previousIMUOrientation;
@@ -115,6 +118,8 @@ public class ThreeWheelIMULocalizer extends Localizer {
         displacementPose = new Pose();
         currentVelocity = new Pose();
         totalHeading = 0;
+        adaptivePIDController = new AdaptivePIDController();
+
 
         resetEncoders();
     }
