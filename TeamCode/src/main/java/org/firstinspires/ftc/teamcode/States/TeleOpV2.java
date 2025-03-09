@@ -29,7 +29,7 @@ public class TeleOpV2 extends LinearOpMode {
     private static final double SERVO_MAX = 0.7;
     private final Pose scorePose = new Pose(5.4, 17.8, 2.32);
     private final Pose parkPose = new Pose(-55, 10, Math.toRadians(270));
-    private double lastPosition = 0.2;
+    private double lastPosition = 0.3;
     final double SERVO_INCREMENT = 0.4; // Increment for smooth movement
     final double LOOP_DELAY = 0.05;
 
