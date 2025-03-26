@@ -26,10 +26,10 @@ public class AutoTest3 extends OpMode {
     // private int caseNumber = 0;
     // Starting and target positions
     private final Pose startPose = new Pose(0, 0, Math.toRadians(0));
-    private final Pose scorePose = new Pose(6, 17.7, 2.37);
-    private final Pose pickup1Pose = new Pose(14.2, 10.3, 3.15);
-    private final Pose pickup2Pose = new Pose(13.6, 18.7, Math.toRadians(180));
-    private final Pose pickup3Pose = new Pose(32.5, 10.5, 4.7);
+    private final Pose scorePose = new Pose(2, 17.7, 2.34);
+    private final Pose pickup1Pose = new Pose(10.8, 6.6, 3);
+    private final Pose pickup2Pose = new Pose(9.8, 8.1, Math.toRadians(180));
+    private final Pose pickup3Pose = new Pose(28.8, 9.2, 4.7);
     private final Pose parkPose = new Pose(70.3, -13.8, 4.64);
       // Paths and subsystems
     private Path scorePreload;

@@ -46,7 +46,7 @@ public class fiveSpec extends OpMode {
 
     private final Pose specimen1ControlPose = new Pose(60, -26, Math.toRadians(180));
     private final Pose specimen1PushReadyPose = new Pose(8.5, -14.2, Math.toRadians(180));
-    private final Pose specimen1Pose = new Pose(45, -26, Math.toRadians(180));
+    private final Pose specimen1Pose = new Pose(45, -27, Math.toRadians(180));
     private final Pose specimen1StrafePose = new Pose(48, -29, Math.toRadians(180));
     private final Pose specimen1PushPose = new Pose(25, -28, Math.toRadians(180));
     private final Pose specimen2Pose = new Pose(45, -33, Math.toRadians(180));

@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.config.subsystem;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
+import com.qualcomm.robotcore.hardware.TouchSensor;
 public class ClawSubsystem {
 
     // Elevator motor
@@ -17,6 +17,7 @@ public class ClawSubsystem {
     private Servo sweepServo;
     private Servo specTurnServo;
     private Servo specGrabServo;
+    private TouchSensor touch;
     // Constants for elevator power
     private static final double ELEVATOR_POWER = 1.0;
     private static final int TICKS_PER_INCH = 100; // Adjust based on your motor and gearing
@@ -34,24 +35,25 @@ public class ClawSubsystem {
     private static final int STARTING_POSITION_TICKS = 30; // Define the starting position
 
     // Servo positions
-    private static final double TURN_GRAB_POSITION = 0.04;
-    private static final double TURN_RELEASE_POSITION = 0.58;
-    private static final double TURN_VERTICAL_POSITION = 0.5;
-    private static final double TURN_READY_POSITION = 0.15;
+    private static final double TURN_GRAB_POSITION = 0.1;
+    private static final double TURN_RELEASE_POSITION = 0.7;
+    private static final double TURN_VERTICAL_POSITION = 0.6;
+    private static final double TURN_READY_POSITION = 0.25;
 
 
 
-    private static final double SPIN_GRAB_POSITION = .2;
-    private static final double SPIN_RELEASE_POSITION = .6;
+    private static final double SPIN_GRAB_POSITION = .22;
+    private static final double SPIN_RELEASE_POSITION = .8;
     private static final double SPIN_complete_POSITION = .15;
 
     private static final double BUCKET_DUMP_POSITION = 0.1;
     private static final double BUCKET_NEUTRAL_POSITION = 0.5;
-    private static final double EXTEND_ORIGINAL_POSITION = 0.2;
+    private static final double EXTEND_ORIGINAL_POSITION = 0;
 
     // Current state tracking
     private boolean liftControlActive = false;
     public int height = 0;
+    private boolean ifPressed = false;
     // 0 = down, 1 = specimen height, 2 = full elevator height
 
     public ClawSubsystem(HardwareMap hardwareMap) {
@@ -71,6 +73,8 @@ public class ClawSubsystem {
         sweepServo = hardwareMap.get(Servo.class, "sweepServo");
         specTurnServo = hardwareMap.get(Servo.class, "specTurnServo");
         specGrabServo = hardwareMap.get(Servo.class, "specGrabServo");
+       // touch = hardwareMap.get(TouchSensor.class, "touch");
+
     }
 
 
@@ -80,16 +84,16 @@ public class ClawSubsystem {
 
 
     public void grabSpec(){
-        specGrabServo.setPosition(0.1);
+        specGrabServo.setPosition(0.5);
     }
 
     public void releaseSpec(){
-        specGrabServo.setPosition(.5);
+        specGrabServo.setPosition(1);
 
     }
     public void specReadyForGrab(){
         specTurnServo.setPosition(0);
-        specGrabServo.setPosition(.5);
+        specGrabServo.setPosition(1);
     }
     public void specReadyForHang(){
         specTurnServo.setPosition(.7);
@@ -98,13 +102,21 @@ public class ClawSubsystem {
     }
 
     public void specHang(){
-        specTurnServo.setPosition(.52);
+        specTurnServo.setPosition(.6);
 
     }
 
+    public boolean isPressed(){
+        return touch.isPressed();
+    }
 
+    public void setPressed(boolean pressed){
+        ifPressed = pressed;
+    }
 
-
+    public void setNotPressed(){
+        ifPressed = false;
+    }
     public void moveUp() {
         if (!liftControlActive) {
             liftControlActive = true;
@@ -119,7 +131,7 @@ public class ClawSubsystem {
         }
     }
 
-    public void moveUpSp() {
+    public void moveUpSp(){
         if (!liftControlActive) {
             liftControlActive = true;
             //moveElevator(-SMALL_LIFT_TICKS, 1); // Set height to 1 for small lift
@@ -192,11 +204,11 @@ public class ClawSubsystem {
         }
     }
     public void extend() {
-        extendServo.setPosition(0.7);
+        extendServo.setPosition(0.5);
 
     }
     public void retract() {
-        extendServo.setPosition(0.2);
+        extendServo.setPosition(0);
 
     }
 

@@ -2,8 +2,22 @@ package org.firstinspires.ftc.teamcode.pedroPathing.localization;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.hardware.AnalogInput;
+
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
+
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.MathFunctions;
 import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+
+
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 
 /**
  * This is the Pose class. It defines poses in 2D space, like the Pose2D class in Road Runner except
@@ -14,12 +28,18 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Vector;
  * @author Anyi Lin - 10158 Scott's Bots
  * @version 1.0, 4/2/2024
  */
+
+
 public class Pose {
+
     private double x;
     private double y;
     private double heading;
+    AnalogInput ranger;
 
-    /**
+    public void init() {
+        ranger = hardwareMap.get(AnalogInput.class, "ranger");
+    }/**
      * This creates a new Pose from a x, y, and heading inputs.
      *
      * @param setX the initial x value
