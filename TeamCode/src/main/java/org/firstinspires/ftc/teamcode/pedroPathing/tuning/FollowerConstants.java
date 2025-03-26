@@ -36,17 +36,17 @@ public class FollowerConstants {
 
     // This section is for setting the actual drive vector for the front left wheel, if the robot
     // is facing a heading of 0 radians with the wheel centered at (0,0)
-    private static double xMovement = 40.6863;
-    private static double yMovement = 60.292;
+    private static double xMovement = 48.6863;
+    private static double yMovement = 55.292;
     private static double[] convertToPolar = Point.cartesianToPolar(xMovement, -yMovement);
     public static Vector frontLeftVector = MathFunctions.normalizeVector(new Vector(convertToPolar[0], convertToPolar[1]));
 
 
     // Translational PIDF coefficients (don't use integral)
     public static CustomPIDFCoefficients translationalPIDFCoefficients = new CustomPIDFCoefficients(
-            0.08,
+            0.1,
             0,
-            0.002,
+            0.003,
             0);
 
     // Translational Integral
@@ -62,25 +62,25 @@ public class FollowerConstants {
 
     // Heading error PIDF coefficients
     public static CustomPIDFCoefficients headingPIDFCoefficients = new CustomPIDFCoefficients(
-            1,
+            2.5,
             0,
-            0.03,
+            0.05,
             0);
 
     // Feed forward constant added on to the heading PIDF
-    public static double headingPIDFFeedForward = 0.015;
+    public static double headingPIDFFeedForward = 0.02;
 
 
     // Drive PIDF coefficients
     public static CustomFilteredPIDFCoefficients drivePIDFCoefficients = new CustomFilteredPIDFCoefficients(
-            0.1,
+            0.01,
             0,
-            0.000003,
+            0.000001,
             0.6,
             0);
 
     // Feed forward constant added on to the drive PIDF
-    public static double drivePIDFFeedForward = 0.015;
+    public static double drivePIDFFeedForward = 0.01;
 
     // Kalman filter parameters for the drive error Kalman filter
     public static KalmanFilterParameters driveKalmanFilterParameters = new KalmanFilterParameters(
@@ -97,11 +97,11 @@ public class FollowerConstants {
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
     // if not negative, then the robot thinks that its going to go faster under 0 power
-    public static double forwardZeroPowerAcceleration = -54.116;
+    public static double forwardZeroPowerAcceleration = -42.116;
 
     // Acceleration of the drivetrain when power is cut in inches/second^2 (should be negative)
     // if not negative, then the robot thinks that its going to go faster under 0 power
-    public static double lateralZeroPowerAcceleration = -85.0478;
+    public static double lateralZeroPowerAcceleration = -75.0478;
 
     // A multiplier for the zero power acceleration to change the speed the robot decelerates at
     // the end of paths.
@@ -110,7 +110,7 @@ public class FollowerConstants {
     // Decreasing this will cause the deceleration at the end of the Path to be slower, making the
     // robot slower but reducing risk of end-of-path overshoots or localization slippage.
     // This can be set individually for each Path, but this is the default.
-    public static double zeroPowerAccelerationMultiplier = 7;
+    public static double zeroPowerAccelerationMultiplier = 4;
 
 
     // When the robot is at the end of its current Path or PathChain and the velocity goes below

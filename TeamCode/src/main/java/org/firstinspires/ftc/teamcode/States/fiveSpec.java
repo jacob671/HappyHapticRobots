@@ -34,15 +34,15 @@ public class fiveSpec extends OpMode {
 
 
     // afterSpecimanPose is the end of the curve
-    private Pose placeSpecimenPose1 = new Pose(28.6, 14, 0);
-    private Pose placeSpecimenPose2 = new Pose(28, 13, 0);
-    private Pose placeSpecimenPose3 = new Pose(28, 12.5, 0);
-    private Pose placeSpecimenPose4 = new Pose(28., 12, 0);
+    private Pose placeSpecimenPose1 = new Pose(28.5, 14, 0);
+    private Pose placeSpecimenPose2 = new Pose(28.7, 13, 0);
+    private Pose placeSpecimenPose3 = new Pose(28.7, 12.5, 0);
+    private Pose placeSpecimenPose4 = new Pose(28.7, 12, 0);
     //    private final Pose specimenReayControlPose = new Pose(5, -25, 0);
 //    private final Pose afterSpecimenPose = new Pose(52, -18, Math.toRadians(180));
 
 
-    private final Pose afterSpecimenPose = new Pose(10, -17.4, Math.toRadians(180));
+    private final Pose afterSpecimenPose = new Pose(17, -17.4, Math.toRadians(180));
 
     private final Pose specimen1ControlPose = new Pose(60, -26, Math.toRadians(180));
     private final Pose specimen1PushReadyPose = new Pose(8.5, -14.2, Math.toRadians(180));
@@ -224,16 +224,17 @@ public class fiveSpec extends OpMode {
                 break;
 
             case 2: // Push First sample, and stop
-                if (isNearPose(follower.getPose(), afterSpecimenPose, 8)) {
-                    clawSubsystem.moveToPickingReady();
-                }
 
                 if (isNearPose(follower.getPose(), afterSpecimenPose, 1)) {
-
-
+                    if (clawSubsystem.getElevatorPosition() <= -1790) {
+                        // clawSubsystem.moveDownSp();
+                        clawSubsystem.moveToPickingReady();
+                    }
+                    else {
                         follower.followPath(pushPath, true);
                         opmodeTimer.resetTimer();
                         setPathState(5);
+                    }
                 }
                 break;
 

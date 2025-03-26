@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.States;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.config.subsystem.ClawSubsystem;
@@ -16,27 +15,17 @@ import org.firstinspires.ftc.teamcode.pedroPathing.pathGeneration.Point;
 import org.firstinspires.ftc.teamcode.pedroPathing.tuning.FollowerConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.util.Timer;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.hardware.configuration.annotations.DigitalIoDeviceType;;
-
 @Autonomous(name = "Get_Shitt_OnV3", group = "Competition")
 public class fiveSpecGrabberVersion extends OpMode {
     private int x = 0;
     private int pathState = 0;
     private int highChamberCount = 0;
     private boolean elevatorUp = false;
-    private boolean lift = false;
 
-    private TouchSensor touch;
     private Follower follower;
     private Timer opmodeTimer;
     private ClawSubsystem clawSubsystem;
-    AnalogInput ranger;
-    private Timer yAxisTimer;
+
     // Starting and target positions
     private final Pose startPose = new Pose(0, 0, Math.toRadians(0));
     private Pose placeSpecimenPose = new Pose(30, 12, 0);
@@ -46,40 +35,40 @@ public class fiveSpecGrabberVersion extends OpMode {
 
 
     // afterSpecimanPose is the end of the curve
-    private Pose placeSpecimenPose1 = new Pose(19, 0, 0);
-    private Pose placeSpecimenPose2 = new Pose(20, 2, 0);
+    private Pose placeSpecimenPose1 = new Pose(29.5, 16, 0);
+    private Pose placeSpecimenPose2 = new Pose(29.5, 15, 0);
     private Pose placeSpecimenPose3 = new Pose(29.5, 14.5, 0);
     private Pose placeSpecimenPose4 = new Pose(29.5, 14, 0);
     //    private final Pose specimenReayControlPose = new Pose(5, -25, 0);
 //    private final Pose afterSpecimenPose = new Pose(52, -18, Math.toRadians(180));
 
 
-    private final Pose afterSpecimenPose = new Pose(12, -10, Math.toRadians(0));
+    private final Pose afterSpecimenPose = new Pose(20, -17.4, Math.toRadians(180));
 
-    //private final Pose specimen1ControlPose = new Pose(60, -26, Math.toRadians(0));
-    private final Pose specimen1PushReadyPose = new Pose(8.5, -10, Math.toRadians(0));
-    private final Pose specimen1Pose = new Pose(42, -13, Math.toRadians(0));
-    private final Pose specimen1StrafePose = new Pose(55, -15, Math.toRadians(0));
-    private final Pose specimen1PushPose = new Pose(25, -15, Math.toRadians(0));
-    private final Pose specimen2Pose = new Pose(44, -10.5, Math.toRadians(0));
-    private final Pose specimen2StrafePose = new Pose(53, -14, Math.toRadians(0));
-    private final Pose specimen2PushPose = new Pose(25, -14, Math.toRadians(0));
+    private final Pose specimen1ControlPose = new Pose(60, -26, Math.toRadians(180));
+    private final Pose specimen1PushReadyPose = new Pose(8.5, -14.2, Math.toRadians(180));
+    private final Pose specimen1Pose = new Pose(22.08, -28.72, 2.2);
+    private final Pose specimen1StrafePose = new Pose(48, -29, Math.toRadians(180));
+    private final Pose specimen1PushPose = new Pose(25, -29, Math.toRadians(180));
+    private final Pose specimen2Pose = new Pose(45, -36, Math.toRadians(180));
+    private final Pose specimen2StrafePose = new Pose(48, -40, Math.toRadians(180));
+    private final Pose specimen2PushPose = new Pose(29, -40, Math.toRadians(180));
 
+    private final Pose specimen3Pose = new Pose(45, -42, Math.toRadians(180));
+    private final Pose specimen3StrafePose = new Pose(48, -46, Math.toRadians(180));
+    private final Pose specimen3PushPose = new Pose(29, -46, Math.toRadians(180));
 
-    private final Pose specimen3Pose = new Pose(45, -14.5, Math.toRadians(0));
-    private final Pose specimen3StrafePose = new Pose(53, -20, Math.toRadians(0));
-    private final Pose specimen3PushPose = new Pose(25, -20, Math.toRadians(0));
-    private final Pose readyForHuman1 = new Pose(3, -26, Math.toRadians(0));
-    private final Pose humanPlayerZonePose1 = new Pose(0, -25, Math.toRadians(0));
-    private final Pose humanPlayerZonebackPose1 = new Pose(0, -40, Math.toRadians(0));
-    private final Pose readyForHuman = new Pose(4, -23.8, Math.toRadians(0));
-    private final Pose humanPlayerZonePose = new Pose(0, -21.8, Math.toRadians(0));
-    private final Pose humanPlayerZonebackPose = new Pose(0, -21.8, Math.toRadians(0));
-    private final Pose specHang1Pose = new Pose(0, 12, Math.toRadians(0));
+    private final Pose readyForHuman1 = new Pose(10, -40, Math.toRadians(180));
+    private final Pose humanPlayerZonePose1 = new Pose(-5, -40, Math.toRadians(180));
+    private final Pose humanPlayerZonebackPose1 = new Pose(0, -40, Math.toRadians(180));
+    private final Pose readyForHuman = new Pose(10, -21.8, Math.toRadians(180));
+    private final Pose humanPlayerZonePose = new Pose(-5, -21.8, Math.toRadians(180));
+    private final Pose humanPlayerZonebackPose = new Pose(0, -21.8, Math.toRadians(180));
+
     private final Pose highChamberPose = new Pose(0, 14, 0);
     private final Pose returnHomePose = new Pose(25, 15, 0);
     // Paths
-    private Path hang1Path, specimenToHighChamberPath1, specimenToHighChamberPath2, specimenToHighChamberPath3, specimenToHighChamberPath4, placeSpecimenPath, pushReadyPath, specimen1ReadyPushPath,specimen1Path, specimen1StrafePath,
+    private Path specimenToHighChamberPath1, specimenToHighChamberPath2, specimenToHighChamberPath3, specimenToHighChamberPath4, placeSpecimenPath, pushReadyPath, specimen1ReadyPushPath,specimen1Path, specimen1StrafePath,
             specimen1PushPath, specimen2Path, specimen2StrafePath, specimen2PushPath,specimen3Path, specimen3StrafePath, specimen3PushPath,
             readyForHumanPath1,readyForHumanPath, getSpeciPath, getSpeciBackPath, specimenToHighChamberPath, returnHomePath, readyForHumanPath2,getSpeciPath1, getSpeciBackPath1;
     private PathChain pushPath, pushSpecimen1Path;
@@ -94,16 +83,6 @@ public class fiveSpecGrabberVersion extends OpMode {
         //clawSubsystem.height = 0;
         buildPaths();
         clawSubsystem.moveDownSp();
-        yAxisTimer = new Timer();
-        opmodeTimer.resetTimer();
-        yAxisTimer.resetTimer();
-        //touch = hardwareMap.get(DigitalChannel.class, "touch");
-        //touch.setMode(DigitalChannel.Mode.INPUT);
-        ranger = hardwareMap.get(AnalogInput.class, "ranger");
-        touch = hardwareMap.get(TouchSensor.class, "touch");
-
-
-
     }
 
     @Override
@@ -117,49 +96,7 @@ public class fiveSpecGrabberVersion extends OpMode {
     }
 
     @Override
-
-
-
-
     public void loop() {
-
-        // Update the Y coordinate only every 3 seconds.
-        if ((ranger.getVoltage() * 48.7 - 4.9) > 7 &&
-                ((ranger.getVoltage() * 48.7 - 4.9) < 25) &&
-                (follower.getPose().getHeading() == 0)) {
-
-            if (yAxisTimer.getElapsedTimeSeconds() >= 3.0) {
-                Pose currentPose = follower.getPose();
-                // Calculate the new Y coordinate using the range sensor value.
-                Pose newPose = new Pose(
-                        currentPose.getX(),
-                        (((ranger.getVoltage() * 48.7 - 4.9) - 35.7) + currentPose.getY()) / 2,
-                        currentPose.getHeading());
-                follower.setStartingPose(newPose);
-                telemetry.addData("Reset Y", "Y coordinate set to: " + (ranger.getVoltage() * 48.7 - 4.9));
-                yAxisTimer.resetTimer();
-            }
-        }
-      if (touch.isPressed()) {
-            Pose currentPose = follower.getPose();
-            Pose newPose = new Pose(0, currentPose.getY(), currentPose.getHeading());
-            follower.setStartingPose(newPose);
-            telemetry.addData("Touch Override", "Reset X coordinate to 0");
-        }
-/*
-        if (!touch.getState()) {
-            // Retrieve the current pose
-            Pose currentPose = follower.getPose();
-            // Create a new Pose with the x coordinate reset to zero,
-            // while preserving the y coordinate and heading.
-            Pose newPose = new Pose(0, currentPose.getY(), currentPose.getHeading());
-            // Update the Follower's pose (this method should update the internal odometry coordinate)
-            follower.setStartingPose(newPose);
-            telemetry.addData("Reset X", "PedroPathing X coordinate set to 0");
-        }
-
- */
-
         follower.update();
         autonomousPathUpdate();
         telemetry.addData("Path State", pathState);
@@ -179,8 +116,8 @@ public class fiveSpecGrabberVersion extends OpMode {
         placeSpecimenPath = new Path(new BezierLine(new Point(startPose), new Point(placeSpecimenPose)));
         placeSpecimenPath.setLinearHeadingInterpolation(startPose.getHeading(), placeSpecimenPose.getHeading());
 
-        pushReadyPath = new Path(new BezierLine(new Point(placeSpecimenPose1), new Point(afterSpecimenPose)));
-        pushReadyPath.setLinearHeadingInterpolation(placeSpecimenPose1.getHeading(), afterSpecimenPose.getHeading());
+        pushReadyPath = new Path(new BezierLine(new Point(placeSpecimenPose), new Point(afterSpecimenPose)));
+        pushReadyPath.setLinearHeadingInterpolation(placeSpecimenPose.getHeading(), afterSpecimenPose.getHeading());
 
 
 // Change push Ready Path as a curve
@@ -189,18 +126,15 @@ public class fiveSpecGrabberVersion extends OpMode {
 //        pushReadyPath.setLinearHeadingInterpolation(placeSpecimenPose.getHeading(), afterSpecimenPose.getHeading());
 
 
-       // specimen1ReadyPushPath = new Path(new BezierCurve(new Point(afterSpecimenPose), new Point(specimen1ControlPose), new Point(specimen1PushReadyPose)));
-       // specimen1ReadyPushPath.setLinearHeadingInterpolation(afterSpecimenPose.getHeading(), specimen1PushReadyPose.getHeading());
+        specimen1ReadyPushPath = new Path(new BezierCurve(new Point(afterSpecimenPose), new Point(specimen1ControlPose), new Point(specimen1PushReadyPose)));
+        specimen1ReadyPushPath.setLinearHeadingInterpolation(afterSpecimenPose.getHeading(), specimen1PushReadyPose.getHeading());
 
 
 //        specimen1Path = new Path(new BezierLine(new Point(afterSpecimenPose), new Point(specimen1Pose)));
 //        specimen1Path.setLinearHeadingInterpolation(afterSpecimenPose.getHeading(), specimen1Pose.getHeading());
 
-        specimen1Path = new Path(new BezierLine(new Point(afterSpecimenPose), new Point(specimen1Pose)));
-        specimen1Path.setLinearHeadingInterpolation(afterSpecimenPose.getHeading(), specimen1Pose.getHeading());
-
-        hang1Path = new Path(new BezierLine(new Point(placeSpecimenPose), new Point(specHang1Pose)));
-        hang1Path.setLinearHeadingInterpolation(placeSpecimenPose.getHeading(), specHang1Pose.getHeading());
+        specimen1Path = new Path(new BezierLine(new Point(placeSpecimenPose), new Point(specimen1Pose)));
+        specimen1Path.setLinearHeadingInterpolation(placeSpecimenPose.getHeading(), specimen1Pose.getHeading());
 
 
         specimen1StrafePath = new Path(new BezierLine(new Point(specimen1Pose), new Point(specimen1StrafePose)));
@@ -218,8 +152,8 @@ public class fiveSpecGrabberVersion extends OpMode {
         specimen2PushPath = new Path(new BezierLine(new Point(specimen2StrafePose), new Point(specimen2PushPose)));
         specimen2PushPath.setLinearHeadingInterpolation(specimen2StrafePose.getHeading(), specimen2PushPose.getHeading());
 
-        specimen3Path = new Path(new BezierLine(new Point(specimen2PushPose), new Point(specimen3Pose)));
-        specimen3Path.setLinearHeadingInterpolation(specimen2PushPose.getHeading(), specimen3Pose.getHeading());
+        specimen3Path = new Path(new BezierLine(new Point(specimen3PushPose), new Point(specimen3Pose)));
+        specimen3Path.setLinearHeadingInterpolation(specimen3PushPose.getHeading(), specimen3Pose.getHeading());
 
         specimen3StrafePath = new Path(new BezierLine(new Point(specimen3Pose), new Point(specimen3StrafePose)));
         specimen3StrafePath.setLinearHeadingInterpolation(specimen3Pose.getHeading(), specimen3StrafePose.getHeading());
@@ -255,13 +189,13 @@ public class fiveSpecGrabberVersion extends OpMode {
         specimenToHighChamberPath1.setLinearHeadingInterpolation(startPose.getHeading(), highChamberPose.getHeading());
 
         specimenToHighChamberPath2 = new Path(new BezierLine(new Point(humanPlayerZonebackPose1), new Point(placeSpecimenPose2)));
-        specimenToHighChamberPath2.setLinearHeadingInterpolation(humanPlayerZonebackPose.getHeading(), placeSpecimenPose2.getHeading());
+        specimenToHighChamberPath2.setLinearHeadingInterpolation(humanPlayerZonebackPose.getHeading(), highChamberPose.getHeading());
 
         specimenToHighChamberPath3 = new Path(new BezierLine(new Point(humanPlayerZonebackPose), new Point(placeSpecimenPose3)));
-        specimenToHighChamberPath3.setLinearHeadingInterpolation(humanPlayerZonebackPose.getHeading(), placeSpecimenPose3.getHeading());
+        specimenToHighChamberPath3.setLinearHeadingInterpolation(humanPlayerZonebackPose.getHeading(), highChamberPose.getHeading());
 
         specimenToHighChamberPath4 = new Path(new BezierLine(new Point(humanPlayerZonebackPose), new Point(placeSpecimenPose4)));
-        specimenToHighChamberPath4.setLinearHeadingInterpolation(humanPlayerZonebackPose.getHeading(), placeSpecimenPose4.getHeading());
+        specimenToHighChamberPath4.setLinearHeadingInterpolation(humanPlayerZonebackPose.getHeading(), highChamberPose.getHeading());
 
         returnHomePath = new Path(new BezierLine(new Point(highChamberPose), new Point(returnHomePose)));
         returnHomePath.setLinearHeadingInterpolation(highChamberPose.getHeading(), returnHomePose.getHeading());
@@ -269,9 +203,9 @@ public class fiveSpecGrabberVersion extends OpMode {
         //working to before first push part
         //pushPath = new PathChain(specimen1Path, specimen1StrafePath);
 
-       // pushPath = new PathChain(specimen1Path);
-        pushPath = new PathChain(specimen1Path, specimen1StrafePath, specimen1PushPath, specimen2Path, specimen2StrafePath, specimen2PushPath, specimen3Path, specimen3StrafePath, specimen3PushPath, readyForHumanPath1);
-        //pushSpecimen1Path = new PathChain(specimen1ReadyPushPath, specimen1Path);
+        pushPath = new PathChain(specimen1Path);
+        //pushPath = new PathChain(specimen1Path, specimen1StrafePath, specimen1PushPath, specimen2Path, specimen2StrafePath, specimen2PushPath, readyForHumanPath1);
+        pushSpecimen1Path = new PathChain(specimen1ReadyPushPath, specimen1Path);
         //ww    pushSpecimen1Path = new PathChain(specimen1ReadyPushPath);
     }
 
@@ -279,51 +213,21 @@ public class fiveSpecGrabberVersion extends OpMode {
         switch (pathState) {
             case 0: // Initial state
 
-                if (lift){
                     follower.followPath(specimenToHighChamberPath1, true);
-                    opmodeTimer.resetTimer();
                     setPathState(1);
-                  }
-                else {
-                    clawSubsystem.grabSpec();
-                    clawSubsystem.retract();
-
-               //     clawSubsystem.specReadyForHang();
-                    if (opmodeTimer.getElapsedTimeSeconds() > 0.1) {
-                        clawSubsystem.specReadyForHang();
-                        if (opmodeTimer.getElapsedTimeSeconds() > .5) {
-
-                            lift = true;
-                        }
-                    }
-                }
-
-
 
 
                 break;
             case 1: // Place specimen
-                if (isNearPose(follower.getPose(), placeSpecimenPose1, 1)) {
+                if (isNearPose(follower.getPose(), placeSpecimenPose1, 1.3)) {
+                    if (clawSubsystem.height == 200) {
+                        clawSubsystem.moveDownSpToRelease();
+                        setPathState(2);
 
-
-
-
-
-
-
-
-
-                            clawSubsystem.specHang();
-                            opmodeTimer.resetTimer();
-
-                            opmodeTimer.resetTimer();
-                            setPathState(2);
-
-                                // elevatorUp = false;
-                                // opmodeTimer.resetTimer();
-                                // setPathState(-1);
-
-
+                        // elevatorUp = false;
+                        // opmodeTimer.resetTimer();
+                        // setPathState(-1);
+                    }
                 }
 /*
                 if (clawSubsystem.height == 300) {
@@ -338,67 +242,45 @@ public class fiveSpecGrabberVersion extends OpMode {
                 break;
 
             case 2: // Push First sample, and stop
-                    if (opmodeTimer.getElapsedTimeSeconds()>1) {
-                        follower.followPath(pushReadyPath, true);
 
-                        setPathState(3);
 
-                    }
-                    break;
-
-            case 3:
-
-                    if (opmodeTimer.getElapsedTimeSeconds()>.8) {
-                        clawSubsystem.releaseSpec();
-                        //setPathState(3);
-                    }
-
-                    if (isNearPose(follower.getPose(), afterSpecimenPose, 3)) {
+                    if (isNearPose(follower.getPose(), placeSpecimenPose1, 1)) {
                     // clawSubsystem.moveDownSp();
                    // clawSubsystem.moveToPickingReady();
                     //clawSubsystem.extend();
-
-                        clawSubsystem.specReadyForGrab();
-                        follower.followPath(pushPath, true);
-                        opmodeTimer.resetTimer();
-                        lift = false;
-                        setPathState(4);
-
-
-                        //opmodeTimer.resetTimer();
-                        //setPathState(-1);
-                    }
+                    clawSubsystem.grabReady();
+                    follower.followPath(pushPath, true);
+                    opmodeTimer.resetTimer();
+                    setPathState(3);
+                }
                 break;
 
-//  here
+// Stop here
 
+            case 3: // Ready for next phase
 
+                if (isNearPose(follower.getPose(), specimen1Pose, 10)) {
+                    clawSubsystem.moveDown();
+                }
+
+                if (isNearPose(follower.getPose(), specimen1Pose,1)) {
+                    clawSubsystem.extend();
+                    setPathState(-1);
+                }
+                break;
 
             case 4: // Ready for next phase
-                if (isNearPose(follower.getPose(), readyForHuman, 1)) {
-                    // clawSubsystem.moveDownSp();
 
-                    if (lift){
-                        follower.followPath(specimenToHighChamberPath2, true);
-                        opmodeTimer.resetTimer();
-                        setPathState(6);
+                   // follower.followPath(specimen2Path);
+                    if (opmodeTimer.getElapsedTimeSeconds()>0.3){
+                        clawSubsystem.release();
+                        if (opmodeTimer.getElapsedTimeSeconds()>0.6) {
+
+                            clawSubsystem.bucket();
+                        }
+
+                        setPathState(-1);
                     }
-                    else {
-                        if (opmodeTimer.getElapsedTimeSeconds() > 1) {
-                            clawSubsystem.grabSpec();
-                            clawSubsystem.retract();
-
-                            //     clawSubsystem.specReadyForHang();
-                        if (opmodeTimer.getElapsedTimeSeconds() > 1.1) {
-                            clawSubsystem.specReadyForHang();
-                            if (opmodeTimer.getElapsedTimeSeconds() > 1.5) {
-
-                                lift = true;
-                            }
-                        }
-                        }
-                    }// follower.followPath(specimen2Path);
-                }
 
 
                 break;
@@ -406,44 +288,23 @@ public class fiveSpecGrabberVersion extends OpMode {
             // Stop at the back position
 
             case 6:
-                if (isNearPose(follower.getPose(), placeSpecimenPose2, 1)) {
+                if (isNearPose(follower.getPose(), readyForHuman1, 20)) {
                     // Ready for human interaction
+                    clawSubsystem.moveToPickingReady();
 
 
-
-                    opmodeTimer.resetTimer();
-                    if (opmodeTimer.getElapsedTimeSeconds()>1) {
-                        setPathState(7);
-
-                    }
-                    else{
-                        clawSubsystem.specHang();
-                    }
-                }
-                break;
-            case 7: // Push First sample, and stop
-                if (opmodeTimer.getElapsedTimeSeconds()>0.5) {
-                    follower.followPath(readyForHumanPath, true);
-
-                    setPathState(8);
-
-                }
-                break;
-
-            case 8:
-
-                if (opmodeTimer.getElapsedTimeSeconds()>.8) {
-                    clawSubsystem.releaseSpec();
-                    clawSubsystem.specReadyForGrab();
-                    //setPathState(3);
                 }
 
                 if (isNearPose(follower.getPose(), readyForHuman1, 1)) {
-                    clawSubsystem.grab();
-                    setPathState(-1);
+                    clawSubsystem.moveToPickingReady();
+                    follower.followPath(getSpeciPath1, true);
+                    opmodeTimer.resetTimer();
+                    // clawSubsystem.height = 0;
+                    //clawSubsystem.moveUpSp();
+                    setPathState(12);
                 }
-
-            case 9: // Back to play area
+                break;
+            case 12: // Back to play area
                 if (opmodeTimer.getElapsedTimeSeconds() > 0) {
 
 
