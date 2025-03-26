@@ -25,8 +25,8 @@ public class TeleOpV2 extends LinearOpMode {
     private boolean isGrabbing = false;
     private boolean specimenInGrabber;
     private double divisor = 1;
-    private static final double SERVO_MIN = 0 ;
-    private static final double SERVO_MAX = 0.4;
+    private static final double SERVO_MIN = 0.2;
+    private static final double SERVO_MAX = 0.7;
     private final Pose scorePose = new Pose(5.4, 17.8, 2.32);
     private final Pose parkPose = new Pose(-55, 10, Math.toRadians(270));
     private double lastPosition = 0.2;
@@ -66,11 +66,11 @@ public class TeleOpV2 extends LinearOpMode {
                     double y2 = gamepad2.left_stick_y;
                     double denominator = Math.max((Math.abs(y) + Math.abs(x) + Math.abs(rx)) * divisor, 1 * divisor);
 
-                    double frontLeftPower = (y + x + rx) * 1 / denominator;
+                    double frontLeftPower = (y + x + rx) / denominator;
                     double ExtendAmount = (y2) / denominator / 10;
-                    double backLeftPower = (y - x + rx) * 1/ denominator;
-                    double frontRightPower = (y - x - rx) * 1 / denominator;
-                    double backRightPower = (y + x - rx) * 1 / denominator;
+                    double backLeftPower = (y - x + rx) / denominator;
+                    double frontRightPower = (y - x - rx) / denominator;
+                    double backRightPower = (y + x - rx) / denominator;
 
                     frontLeftMotor.setPower(frontLeftPower);
                     backLeftMotor.setPower(backLeftPower);
@@ -78,17 +78,16 @@ public class TeleOpV2 extends LinearOpMode {
                     backRightMotor.setPower(backRightPower);
                 } else if (isGrabbing) {
 
-                    double y = gamepad1.left_stick_y;
-                    double x = -gamepad1.left_stick_x ;
-                    double rx = gamepad1.right_stick_x;
-                    double y2 = gamepad2.left_stick_y;
-                    double denominator = Math.max((Math.abs(y) + Math.abs(x) + Math.abs(rx)) * divisor, 1 * divisor);
+                    double y =  gamepad1.left_stick_y*1.4;
+                    double x = -gamepad1.left_stick_x*0.8 ;
+                    double rx = gamepad1.right_stick_x*0.8;
+                    double y2 = -gamepad2.left_stick_y*0.8;
+                    double denominator = Math.max((Math.abs(y) + Math.abs(x) + Math.abs(rx))*divisor, 1 * divisor);
 
-                    double frontLeftPower = (y + x + rx) * 1 / denominator;
-                    double ExtendAmount = (y2) / denominator / 10;
-                    double backLeftPower = (y - x + rx) * 1/ denominator;
-                    double frontRightPower = (y - x - rx) * 1 / denominator;
-                    double backRightPower = (y + x - rx) * 1 / denominator;
+                    double frontLeftPower = (y + x + rx) / denominator;
+                    double backLeftPower = (y - x + rx) / denominator;
+                    double frontRightPower = (y - x - rx) / denominator;
+                    double backRightPower = (y + x - rx) / denominator;
 
                     // Assuming you want to use the left stick y-axis
                     if (gamepad1.right_bumper) {
@@ -170,7 +169,7 @@ public class TeleOpV2 extends LinearOpMode {
             if (gamepad1.right_trigger > 0.51) {
                 isGrabbing = true;
                 clawSubsystem.grabReady();
-                divisor = 2;
+                divisor = 4;
                 isGrabbing = true;
 
             } else if (gamepad1.left_trigger > 0.51) {
@@ -178,7 +177,7 @@ public class TeleOpV2 extends LinearOpMode {
                //
                 // sleep(300);
                 divisor = 1;
-                ExtendServo.setPosition(0);
+                ExtendServo.setPosition(0.17);
                 clawSubsystem.release();
 
                 isGrabbing = false;

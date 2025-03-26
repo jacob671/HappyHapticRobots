@@ -41,8 +41,8 @@ public class ClawSubsystem {
 
 
 
-    private static final double SPIN_GRAB_POSITION = .69;
-    private static final double SPIN_RELEASE_POSITION = .34;
+    private static final double SPIN_GRAB_POSITION = .2;
+    private static final double SPIN_RELEASE_POSITION = .6;
     private static final double SPIN_complete_POSITION = .15;
 
     private static final double BUCKET_DUMP_POSITION = 0.1;
@@ -196,7 +196,7 @@ public class ClawSubsystem {
 
     }
     public void retract() {
-        extendServo.setPosition(0.5);
+        extendServo.setPosition(0.2);
 
     }
 
