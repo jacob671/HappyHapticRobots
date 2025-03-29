@@ -34,20 +34,20 @@ public class ClawSubsystem {
     private static final int STARTING_POSITION_TICKS = 30; // Define the starting position
 
     // Servo positions
-    private static final double TURN_GRAB_POSITION = 0.04;
-    private static final double TURN_RELEASE_POSITION = 0.58;
+    private static final double TURN_GRAB_POSITION = 0.1;
+    private static final double TURN_RELEASE_POSITION = 0.7;
     private static final double TURN_VERTICAL_POSITION = 0.5;
-    private static final double TURN_READY_POSITION = 0.15;
+    private static final double TURN_READY_POSITION = 0.2;
 
 
 
-    private static final double SPIN_GRAB_POSITION = .2;
-    private static final double SPIN_RELEASE_POSITION = .6;
+    private static final double SPIN_GRAB_POSITION = .29;
+    private static final double SPIN_RELEASE_POSITION = .8;
     private static final double SPIN_complete_POSITION = .15;
 
-    private static final double BUCKET_DUMP_POSITION = 0.1;
+    private static final double BUCKET_DUMP_POSITION = 0.12;
     private static final double BUCKET_NEUTRAL_POSITION = 0.5;
-    private static final double EXTEND_ORIGINAL_POSITION = 0.2;
+    private static final double EXTEND_ORIGINAL_POSITION = 0;
 
     // Current state tracking
     private boolean liftControlActive = false;
@@ -80,16 +80,16 @@ public class ClawSubsystem {
 
 
     public void grabSpec(){
-        specGrabServo.setPosition(0.1);
+        specGrabServo.setPosition(0.44);
     }
 
     public void releaseSpec(){
-        specGrabServo.setPosition(.5);
+        specGrabServo.setPosition(0.9);
 
     }
     public void specReadyForGrab(){
         specTurnServo.setPosition(0);
-        specGrabServo.setPosition(.5);
+        specGrabServo.setPosition(.9);
     }
     public void specReadyForHang(){
         specTurnServo.setPosition(.7);
@@ -98,7 +98,7 @@ public class ClawSubsystem {
     }
 
     public void specHang(){
-        specTurnServo.setPosition(.52);
+        specTurnServo.setPosition(.62);
 
     }
 
@@ -192,11 +192,11 @@ public class ClawSubsystem {
         }
     }
     public void extend() {
-        extendServo.setPosition(0.7);
+        extendServo.setPosition(0.5);
 
     }
     public void retract() {
-        extendServo.setPosition(0.2);
+        extendServo.setPosition(0.);
 
     }
 
@@ -339,7 +339,7 @@ public class ClawSubsystem {
 
     public void release() {
         turnServo.setPosition(TURN_RELEASE_POSITION);
-        delayAction(() -> spinServo.setPosition(SPIN_RELEASE_POSITION), 900);
+        delayAction(() -> spinServo.setPosition(SPIN_RELEASE_POSITION), 500);
     }
     public void releaseComplete() {
         turnServo.setPosition(TURN_RELEASE_POSITION);

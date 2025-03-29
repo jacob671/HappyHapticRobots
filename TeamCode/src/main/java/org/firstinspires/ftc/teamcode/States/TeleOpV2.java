@@ -25,8 +25,8 @@ public class TeleOpV2 extends LinearOpMode {
     private boolean isGrabbing = false;
     private boolean specimenInGrabber;
     private double divisor = 1;
-    private static final double SERVO_MIN = 0.2;
-    private static final double SERVO_MAX = 0.7;
+    private static final double SERVO_MIN = 0;
+    private static final double SERVO_MAX = 0.5;
     private final Pose scorePose = new Pose(5.4, 17.8, 2.32);
     private final Pose parkPose = new Pose(-55, 10, Math.toRadians(270));
     private double lastPosition = 0.2;
@@ -59,7 +59,7 @@ public class TeleOpV2 extends LinearOpMode {
             if (!isNavigating) {
                 if (!isGrabbing) {
                     // Manual driving control
-                    lastPosition = 0.2;
+                    lastPosition = 0;
                     double y = gamepad1.left_stick_y;
                     double x = -gamepad1.left_stick_x ;
                     double rx = gamepad1.right_stick_x;
@@ -177,7 +177,7 @@ public class TeleOpV2 extends LinearOpMode {
                //
                 // sleep(300);
                 divisor = 1;
-                ExtendServo.setPosition(0.17);
+                ExtendServo.setPosition(0);
                 clawSubsystem.release();
 
                 isGrabbing = false;

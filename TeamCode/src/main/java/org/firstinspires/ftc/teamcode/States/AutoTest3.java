@@ -26,11 +26,11 @@ public class AutoTest3 extends OpMode {
     // private int caseNumber = 0;
     // Starting and target positions
     private final Pose startPose = new Pose(0, 0, Math.toRadians(0));
-    private final Pose scorePose = new Pose(6, 17.7, 2.37);
-    private final Pose pickup1Pose = new Pose(14.2, 10.3, 3.15);
-    private final Pose pickup2Pose = new Pose(13.6, 18.7, Math.toRadians(180));
-    private final Pose pickup3Pose = new Pose(32.5, 10.5, 4.7);
-    private final Pose parkPose = new Pose(70.3, -13.8, 4.64);
+    private final Pose scorePose = new Pose(7, 17.3, 2.4);
+    private final Pose pickup1Pose = new Pose(15, 9.4, 3.15);
+    private final Pose pickup2Pose = new Pose(15, 17.7, Math.toRadians(180));
+    private final Pose pickup3Pose = new Pose(34.2, 7, 4.7);
+    private final Pose parkPose = new Pose(70.3, -17, 4.64);
       // Paths and subsystems
     private Path scorePreload;
     private PathChain grabPickup1, grabPickup2, grabPickup3, scorePickup1, scorePickup2, scorePickup3, park, scoreSub;
@@ -155,6 +155,7 @@ public class AutoTest3 extends OpMode {
 
                 if (clawSubsystem.getElevatorPosition() >= -1200) {
                     clawSubsystem.moveUp();
+                    clawSubsystem.retract();
                 } else {
                     follower.followPath(scorePreload, true);
                     opmodeTimer.resetTimer();
@@ -216,7 +217,7 @@ public class AutoTest3 extends OpMode {
 
             case 2:
 // Lower elevator, follow path, and release claw object
-                if (clawSubsystem.height != 0 && opmodeTimer.getElapsedTimeSeconds() > 0.8) {
+                if (clawSubsystem.height != 0 && opmodeTimer.getElapsedTimeSeconds() > 1.3) {
                     // clawSubsystem.grabReady();
                     clawSubsystem.moveDown();
 
@@ -230,16 +231,20 @@ public class AutoTest3 extends OpMode {
                 // picking up the first sample
                 if (isNearPose(follower.getPose(), pickup1Pose, 1.5)) {
 
-                    if (clawSubsystem.getElevatorPosition() <= -1500) {
+                    if (clawSubsystem.getElevatorPosition() <= -1000) {
                         clawSubsystem.moveDown();
+                        clawSubsystem.retract();
 
+                        //clawSubsystem.extend();
                     } else {
                         if (!sampleInBasket) {
+                            if (opmodeTimer.getElapsedTimeSeconds() > 1) {
 
-                            clawSubsystem.grab();
-                            if (opmodeTimer.getElapsedTimeSeconds() > 2.3) {
+                                clawSubsystem.grab();
+                            }
+                            if (opmodeTimer.getElapsedTimeSeconds() > 2) {
 
-                                clawSubsystem.releaseComplete();
+                                clawSubsystem.release();
                                 sampleInBasket = true;
                                 opmodeTimer.resetTimer();
                                 setPathState(4);
@@ -253,7 +258,7 @@ public class AutoTest3 extends OpMode {
             case 4:
                 // move first sample to dumping place
                 if (clawSubsystem.getElevatorPosition() >= -1400) {
-                    if (opmodeTimer.getElapsedTimeSeconds() > 1) {
+                    if (opmodeTimer.getElapsedTimeSeconds() > 0.5) {
 
                         clawSubsystem.moveUp();
                     }
@@ -303,17 +308,21 @@ public class AutoTest3 extends OpMode {
                     if (clawSubsystem.getElevatorPosition() <= -800) {
                         clawSubsystem.moveDown();
                         clawSubsystem.grabReady();
+                        //clawSubsystem.extend();
+                        clawSubsystem.retract();
+
+
                     } else {
                         if (!sampleInBasket) {
-                            if (opmodeTimer.getElapsedTimeSeconds() > 1) {
+                            if (opmodeTimer.getElapsedTimeSeconds() > 1.4) {
                                 clawSubsystem.grab();
 
 
                             }
 
 
-                            if (opmodeTimer.getElapsedTimeSeconds() > 3.5) {
-                                clawSubsystem.releaseComplete();
+                            if (opmodeTimer.getElapsedTimeSeconds() > 2.4) {
+                                clawSubsystem.release();
 
                                 opmodeTimer.resetTimer();
                                 setPathState(8);
@@ -326,7 +335,7 @@ public class AutoTest3 extends OpMode {
 
             case 8:
                 if (clawSubsystem.getElevatorPosition() >= -1400) {
-                    if (opmodeTimer.getElapsedTimeSeconds() > 1) {
+                    if (opmodeTimer.getElapsedTimeSeconds() > 0.5) {
 
                         clawSubsystem.moveUp();
                     }
@@ -364,7 +373,7 @@ public class AutoTest3 extends OpMode {
 
             case 10:
 
-                if (clawSubsystem.height != 0 && opmodeTimer.getElapsedTimeSeconds() > 1) {
+                if (clawSubsystem.height != 0 && opmodeTimer.getElapsedTimeSeconds() > 1.3) {
                     clawSubsystem.grabReady();
                     clawSubsystem.moveDown();
                     follower.followPath(grabPickup3, true);
@@ -382,11 +391,12 @@ public class AutoTest3 extends OpMode {
                     if (clawSubsystem.getElevatorPosition() <= -1900) {
                         clawSubsystem.moveDown();
                         clawSubsystem.grabReady();
+                        //clawSubsystem.extend();
                         sampleInBasket = false;
                     } else {
                         if (!sampleInBasket) {
 
-                            if (opmodeTimer.getElapsedTimeSeconds() > 2) {
+                            if (opmodeTimer.getElapsedTimeSeconds() > 3) {
 
 
                                 clawSubsystem.grab();
@@ -394,8 +404,8 @@ public class AutoTest3 extends OpMode {
 
                             }
 
-                            if (opmodeTimer.getElapsedTimeSeconds() > 3.5) {
-                                clawSubsystem.releaseComplete();
+                            if (opmodeTimer.getElapsedTimeSeconds() > 4) {
+                                clawSubsystem.release();
                                 sampleInBasket = true;
                                 opmodeTimer.resetTimer();
                                 setPathState(12);
@@ -409,7 +419,7 @@ public class AutoTest3 extends OpMode {
 
             case 12:
                 if (clawSubsystem.getElevatorPosition() >= -1400) {
-                    if (opmodeTimer.getElapsedTimeSeconds() > 2) {
+                    if (opmodeTimer.getElapsedTimeSeconds() > 1) {
 
                         clawSubsystem.moveUp();
                     }
@@ -447,11 +457,11 @@ public class AutoTest3 extends OpMode {
 
             case 14:
 
-                if (opmodeTimer.getElapsedTimeSeconds() > 1) {
+                if (opmodeTimer.getElapsedTimeSeconds() > 1.3) {
 
                     if (clawSubsystem.getElevatorPosition() <= -1900) {
                         clawSubsystem.moveDown();
-                        clawSubsystem.extendOriginal();
+                     //   clawSubsystem.extendOriginal();
                        // clawSubsystem.bucket();
                        // clawSubsystem.sweep();
                     } else {
