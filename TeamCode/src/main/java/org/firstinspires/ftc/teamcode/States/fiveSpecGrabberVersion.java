@@ -53,7 +53,7 @@ public class fiveSpecGrabberVersion extends OpMode {
     private final Pose specimen1Pose = new Pose(40, -22, Math.toRadians(0));
     private final Pose specimen1StrafePose = new Pose(52, -29, Math.toRadians(0));
     private final Pose specimen1PushPose = new Pose(15, -32, Math.toRadians(0));
-    private final Pose specimen2Pose = new Pose(41, -31, Math.toRadians(0));
+    private final Pose specimen2Pose = new Pose(41, -30, Math.toRadians(0));
     private final Pose specimen2StrafePose = new Pose(52, -37, Math.toRadians(0));
     private final Pose specimen2PushPose = new Pose(15, -37, Math.toRadians(0));
 
@@ -327,14 +327,14 @@ public class fiveSpecGrabberVersion extends OpMode {
                         setPathState(6);
                     }
                     else {
-                        if (opmodeTimer.getElapsedTimeSeconds() > 2) {
+                        if (opmodeTimer.getElapsedTimeSeconds() > 4) {
                             clawSubsystem.grabSpec();
                             clawSubsystem.retract();
                         }
                         //     clawSubsystem.specReadyForHang();
-                        if (opmodeTimer.getElapsedTimeSeconds() > 2.2) {
+                        if (opmodeTimer.getElapsedTimeSeconds() > 4.3) {
                             clawSubsystem.specReadyForHang();
-                            if (opmodeTimer.getElapsedTimeSeconds() > 2.3) {
+                            if (opmodeTimer.getElapsedTimeSeconds() > 4.4) {
 
                                 lift = true;
                             }
@@ -386,14 +386,14 @@ public class fiveSpecGrabberVersion extends OpMode {
                         setPathState(9);
                     }
                     else {
-                        if (opmodeTimer.getElapsedTimeSeconds() > 2.2) {
+                        if (opmodeTimer.getElapsedTimeSeconds() > 3.2) {
                             clawSubsystem.grabSpec();
                             clawSubsystem.retract();
                         }
                         //     clawSubsystem.specReadyForHang();
-                        if (opmodeTimer.getElapsedTimeSeconds() > 2.4) {
+                        if (opmodeTimer.getElapsedTimeSeconds() > 3.4) {
                             clawSubsystem.specReadyForHang();
-                            if (opmodeTimer.getElapsedTimeSeconds() > 2.6) {
+                            if (opmodeTimer.getElapsedTimeSeconds() > 3.9) {
 
                                 lift = true;
                             }
@@ -453,7 +453,7 @@ public class fiveSpecGrabberVersion extends OpMode {
                         //     clawSubsystem.specReadyForHang();
                         if (opmodeTimer.getElapsedTimeSeconds() > 3.1) {
                             clawSubsystem.specReadyForHang();
-                            if (opmodeTimer.getElapsedTimeSeconds() > 3.4) {
+                            if (opmodeTimer.getElapsedTimeSeconds() > 3.9) {
 
                                 lift = true;
                             }
@@ -513,7 +513,7 @@ public class fiveSpecGrabberVersion extends OpMode {
                         //     clawSubsystem.specReadyForHang();
                         if (opmodeTimer.getElapsedTimeSeconds() > 3.1) {
                             clawSubsystem.specReadyForHang();
-                            if (opmodeTimer.getElapsedTimeSeconds() > 3.4) {
+                            if (opmodeTimer.getElapsedTimeSeconds() > 3.9) {
 
                                 lift = true;
                             }

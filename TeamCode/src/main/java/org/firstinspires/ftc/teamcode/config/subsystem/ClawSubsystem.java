@@ -34,10 +34,10 @@ public class ClawSubsystem {
     private static final int STARTING_POSITION_TICKS = 30; // Define the starting position
 
     // Servo positions
-    private static final double TURN_GRAB_POSITION = 0.1;
+    private static final double TURN_GRAB_POSITION = 0.12;
     private static final double TURN_RELEASE_POSITION = 0.7;
     private static final double TURN_VERTICAL_POSITION = 0.5;
-    private static final double TURN_READY_POSITION = 0.2;
+    private static final double TURN_READY_POSITION = 0.25;
 
 
 

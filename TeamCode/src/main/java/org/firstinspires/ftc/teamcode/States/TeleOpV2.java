@@ -128,7 +128,7 @@ public class TeleOpV2 extends LinearOpMode {
 
             }
 
-
+/*
             if (gamepad1.dpad_right){
                 clawSubsystem.specReadyForGrab();
             }
@@ -147,8 +147,9 @@ public class TeleOpV2 extends LinearOpMode {
             if (gamepad1.right_stick_button){
                 clawSubsystem.grabSpec();
 
-            }
 
+            }
+*/
             // Additional gamepad controls
             if (gamepad2.left_trigger > 0.4 && !liftControlActive) {
                 clawSubsystem.extendOriginal();
