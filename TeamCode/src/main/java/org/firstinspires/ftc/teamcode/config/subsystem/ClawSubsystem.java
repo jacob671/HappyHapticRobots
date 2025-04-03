@@ -34,19 +34,19 @@ public class ClawSubsystem {
     private static final int STARTING_POSITION_TICKS = 30; // Define the starting position
 
     // Servo positions
-    private static final double TURN_GRAB_POSITION = 0.12;
+    private static final double TURN_GRAB_POSITION = 0.22;
     private static final double TURN_RELEASE_POSITION = 0.7;
-    private static final double TURN_VERTICAL_POSITION = 0.5;
-    private static final double TURN_READY_POSITION = 0.25;
-
+    private static final double TURN_VERTICAL_POSITION = 0.53;
+    private static final double TURN_READY_POSITION = 0.3;
+//skibdi toilet
 
 
     private static final double SPIN_GRAB_POSITION = .29;
     private static final double SPIN_RELEASE_POSITION = .8;
     private static final double SPIN_complete_POSITION = .15;
 
-    private static final double BUCKET_DUMP_POSITION = 0.12;
-    private static final double BUCKET_NEUTRAL_POSITION = 0.5;
+    private static final double BUCKET_DUMP_POSITION = 0.13;
+    private static final double BUCKET_NEUTRAL_POSITION = 0.59;
     private static final double EXTEND_ORIGINAL_POSITION = 0;
 
     // Current state tracking
@@ -80,7 +80,7 @@ public class ClawSubsystem {
 
 
     public void grabSpec(){
-        specGrabServo.setPosition(0.44);
+        specGrabServo.setPosition(0.5);
     }
 
     public void releaseSpec(){
@@ -88,17 +88,19 @@ public class ClawSubsystem {
 
     }
     public void specReadyForGrab(){
+        extendServo.setPosition(0);
         specTurnServo.setPosition(0);
-        specGrabServo.setPosition(.9);
+        specGrabServo.setPosition(0.9);
     }
     public void specReadyForHang(){
-        specTurnServo.setPosition(.7);
+        specTurnServo.setPosition(.6);
+        extendServo.setPosition(0);
 
 
     }
 
     public void specHang(){
-        specTurnServo.setPosition(.62);
+        specTurnServo.setPosition(.5);
 
     }
 
@@ -117,6 +119,9 @@ public class ClawSubsystem {
             liftControlActive = true;
             moveElevatorToPosition(STARTING_POSITION_TICKS, 0); // Set height to 0 when fully down
         }
+    }
+    public void smallExtend(){
+        extendServo.setPosition(0.2);
     }
 
     public void moveUpSp() {
@@ -192,6 +197,7 @@ public class ClawSubsystem {
         }
     }
     public void extend() {
+        specTurnServo.setPosition(0);
         extendServo.setPosition(0.5);
 
     }
@@ -304,11 +310,31 @@ public class ClawSubsystem {
 
     }
 
-    public void grab() {
-        turnServo.setPosition(TURN_GRAB_POSITION);
+    public void grab1() {
+
        // delayAction(() ->
+
+            delayAction(() -> spinServo.setPosition(SPIN_GRAB_POSITION), 300);
+
+            turnServo.setPosition(TURN_GRAB_POSITION);
+
+
+            //, 100);
+
+
+    }
+    public void grab() {
+
+        // delayAction(() ->
+        turnServo.setPosition(TURN_GRAB_POSITION);
         spinServo.setPosition(SPIN_GRAB_POSITION);
-                //, 100);
+
+
+
+
+        //, 100);
+
+
     }
 
     public void grabReady() {
@@ -318,7 +344,7 @@ public class ClawSubsystem {
     }
 
     public void grabVertical() {
-        extendServo.setPosition(EXTEND_ORIGINAL_POSITION);
+        extendServo.setPosition(0);
         turnServo.setPosition(TURN_VERTICAL_POSITION);
     }
 
@@ -339,7 +365,7 @@ public class ClawSubsystem {
 
     public void release() {
         turnServo.setPosition(TURN_RELEASE_POSITION);
-        delayAction(() -> spinServo.setPosition(SPIN_RELEASE_POSITION), 500);
+        delayAction(() -> spinServo.setPosition(SPIN_RELEASE_POSITION), 700);
     }
     public void releaseComplete() {
         turnServo.setPosition(TURN_RELEASE_POSITION);
