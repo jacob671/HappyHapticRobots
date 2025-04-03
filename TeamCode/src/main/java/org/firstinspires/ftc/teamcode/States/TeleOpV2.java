@@ -18,19 +18,21 @@ public class TeleOpV2 extends LinearOpMode {
     private ClawSubsystem clawSubsystem;
     private Timer timer = new Timer();
     private Follower follower;
+    private boolean Grabber = true;
     private Servo ExtendServo, SpinServo;
     private boolean liftControlActive = false;
     private boolean bucketControlActive = false;
     private boolean isNavigating = false;
     private boolean isGrabbing = false;
     private boolean specimenInGrabber;
+    private int extension = 0;
     private double divisor = 1;
     private static final double SERVO_MIN = 0;
     private static final double SERVO_MAX = 0.5;
     private final Pose scorePose = new Pose(5.4, 17.8, 2.32);
     private final Pose parkPose = new Pose(-55, 10, Math.toRadians(270));
     private double lastPosition = 0.2;
-    final double SERVO_INCREMENT = 0.4; // Increment for smooth movement
+    final double SERVO_INCREMENT = 0.2; // Increment for smooth movement
     final double LOOP_DELAY = 0.05;
 
     @Override
@@ -47,7 +49,7 @@ public class TeleOpV2 extends LinearOpMode {
 
         clawSubsystem = new ClawSubsystem(hardwareMap);
         follower = new Follower(hardwareMap);
-        ExtendServo.setPosition(lastPosition);
+        //ExtendServo.setPosition(lastPosition);
         // Reverse the right side motors
         frontRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backRightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -92,17 +94,19 @@ public class TeleOpV2 extends LinearOpMode {
                     // Assuming you want to use the left stick y-axis
                     if (gamepad1.right_bumper) {
                         // Move forward
-                        lastPosition += 1 * SERVO_INCREMENT;
+                        clawSubsystem.extend();
+                        //sleep(100);
+
                     } else if (gamepad1.left_bumper) {
                         // Move backward
-                        lastPosition += 1 * -SERVO_INCREMENT;
+                        clawSubsystem.retract();
                     }
 
                     // Clamp position to valid servo range
                     lastPosition = Math.max(SERVO_MIN, Math.min(SERVO_MAX, lastPosition));
 
                     // Update servo position
-                    ExtendServo.setPosition(lastPosition);
+                   // ExtendServo.setPosition(lastPosition);
 
                     // Save the last valid position
 
@@ -128,7 +132,7 @@ public class TeleOpV2 extends LinearOpMode {
 
             }
 
-/*
+
             if (gamepad1.dpad_right){
                 clawSubsystem.specReadyForGrab();
             }
@@ -149,10 +153,10 @@ public class TeleOpV2 extends LinearOpMode {
 
 
             }
-*/
+
             // Additional gamepad controls
             if (gamepad2.left_trigger > 0.4 && !liftControlActive) {
-                clawSubsystem.extendOriginal();
+                clawSubsystem.grabVertical();
                 clawSubsystem.moveDown();
 
             } else if (gamepad2.right_trigger > 0.4 && !liftControlActive) {
@@ -163,12 +167,13 @@ public class TeleOpV2 extends LinearOpMode {
 
             }
             if (gamepad1.b){
+                Grabber = false;
                 isGrabbing = true;
                 divisor=4;
                 clawSubsystem.reset();
             }
             if (gamepad1.right_trigger > 0.51) {
-                isGrabbing = true;
+                Grabber = true;
                 clawSubsystem.grabReady();
                 divisor = 4;
                 isGrabbing = true;
@@ -185,7 +190,12 @@ public class TeleOpV2 extends LinearOpMode {
             }
             if (gamepad1.y) {
                 isGrabbing = true;
-                clawSubsystem.grab();
+                if(Grabber) {
+                    clawSubsystem.grab1();
+                }
+                else{
+                    clawSubsystem.grab();
+                }
             }
 
             if (gamepad2.dpad_left) {
